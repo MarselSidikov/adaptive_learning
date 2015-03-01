@@ -1,10 +1,15 @@
 package ru.kpfu.ivmiit.learning.tools;
 
+import ru.kpfu.ivmiit.learning.tools.models.Answers;
+import ru.kpfu.ivmiit.learning.tools.models.LoginData;
+import ru.kpfu.ivmiit.learning.tools.models.Test;
+import ru.kpfu.ivmiit.learning.tools.models.User;
+
 /**
  * @author Sidikov Marsel (Kazan Federal University)
  *
  */
-public class AdaptiveLearningServiceFacade {
+public interface AdaptiveLearningServiceFacade {
 
     /**
      *
@@ -31,12 +36,35 @@ public class AdaptiveLearningServiceFacade {
      */
     void logout(String userToken);
 
+    /**
+     *
+     * @param user
+     * @return token of user
+     * @throws java.lang.IllegalArgumentException if some of user-data is not valid
+     */
     String signUp(User user);
 
+    /**
+     *
+     * @param userToken
+     * @return information of user with userToken
+     * @throws java.lang.IllegalArgumentException if user with this token is not exist
+     */
     User getProfile(String userToken);
 
+    /**
+     *
+     * @param userToken
+     * @return test of user
+     * @throws java.lang.IllegalArgumentException if user with this token is not exist
+     */
     Test getTest(String userToken);
 
+    /**
+     *
+     * @param userToken
+     * @param answers
+     * @throws java.lang.IllegalArgumentException if user with this token is not exist
+     */
     void answersSubmit(String userToken, Answers answers);
-
 }
