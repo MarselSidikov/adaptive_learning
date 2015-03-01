@@ -19,5 +19,4 @@ public class AdaptiveLearningServiceFacade {
 
     void answersSubmit(String userToken, Answers answers);
 
-    
 }
