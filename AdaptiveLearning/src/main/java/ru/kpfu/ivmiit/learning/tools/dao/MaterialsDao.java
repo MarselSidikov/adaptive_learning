@@ -1,7 +1,8 @@
 package ru.kpfu.ivmiit.learning.tools.dao;
 
 /**
- * Created by marsel on 02.03.15.
+ * @author Sidikov Marsel (Kazan Federal University)
+ *
  */
 public interface MaterialsDao {
 }
