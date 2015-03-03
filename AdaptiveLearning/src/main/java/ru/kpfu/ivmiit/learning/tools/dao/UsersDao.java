@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface UsersDao<TestResults> {
     String login(LoginData data);
-    boolean ckeckLogin (String login);
+    boolean checkLogin (String login);
     void logout(String userToken);
     String signUp(User user);
     User getProfile(String userToken);
