@@ -64,7 +64,8 @@ public class AdaptiveLearningServiceFacadeImpl implements AdaptiveLearningServic
     @Override
 	public Test getTest(String userToken) {
         List<Integer> userResults = usersDao.getAllResults(userToken);
-        return testProvider.getTest(userResults);
+        int currentMaterialId = usersDao.getMaterials(userToken).get(0);
+        return testProvider.getTest(userResults,currentMaterialId);
 	}
 
 	@Override
