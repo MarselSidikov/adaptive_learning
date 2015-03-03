@@ -8,7 +8,7 @@ import ru.kpfu.ivmiit.learning.tools.models.*;
 import java.util.List;
 
 /**
- * @author Marsel Sidikov (Kazan Federal University)
+ * @author Marsel Sidikov (Kazan Federal University) and ZulfatMiftakhutdinov (Kazan Federal University)
  */
 public class AdaptiveLearningServiceFacadeImpl implements AdaptiveLearningServiceFacade {
 
@@ -40,7 +40,7 @@ public class AdaptiveLearningServiceFacadeImpl implements AdaptiveLearningServic
 
 	@Override
 	public User getProfile(String userToken) {
-		return usersDao.getProfile();
+		return usersDao.getProfile(userToken);
 	}
 
     @Override
@@ -71,8 +71,8 @@ public class AdaptiveLearningServiceFacadeImpl implements AdaptiveLearningServic
 	public void answersSubmit(String userToken, Answers answers) {
         int result = TestProvider.getResult(userToken, answers);
         List<Integer> oldUserResults = usersDao.getAllResults(userToken);
-        Material newMaterial = materialsResolver.getNewMaterial(result, oldUserResults);
-        usersDao.answersSubmit(userToken, answers);
-        usersDao.addNewMaterial(userToken, newMaterail);
+        int newMaterial = materialsResolver.getNewMaterial(result, oldUserResults);
+        usersDao.answersSubmit(userToken, result);
+        usersDao.addNewMaterial(userToken, newMaterial);
 	}
 }
