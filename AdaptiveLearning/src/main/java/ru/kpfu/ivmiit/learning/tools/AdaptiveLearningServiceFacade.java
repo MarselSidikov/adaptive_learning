@@ -1,9 +1,6 @@
 package ru.kpfu.ivmiit.learning.tools;
 
-import ru.kpfu.ivmiit.learning.tools.models.Answers;
-import ru.kpfu.ivmiit.learning.tools.models.LoginData;
-import ru.kpfu.ivmiit.learning.tools.models.Test;
-import ru.kpfu.ivmiit.learning.tools.models.User;
+import ru.kpfu.ivmiit.learning.tools.models.*;
 
 /**
  * @author Sidikov Marsel (Kazan Federal University)
@@ -51,6 +48,22 @@ public interface AdaptiveLearningServiceFacade {
      * @throws java.lang.IllegalArgumentException if user with this token is not exist
      */
     User getProfile(String userToken);
+
+    /**
+     *
+     * @param id
+     * @param userToken
+     * @return
+     */
+    Material getMaterial(int id, String userToken);
+
+    /**
+     *
+     * @param id
+     * @param userToken
+     * @return true, if alternative material is exist, false - otherwise
+     */
+    boolean changeMaterial(int id, String userToken);
 
     /**
      *

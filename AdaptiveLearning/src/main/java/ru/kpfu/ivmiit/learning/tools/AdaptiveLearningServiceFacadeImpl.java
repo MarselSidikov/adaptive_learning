@@ -3,10 +3,9 @@ package ru.kpfu.ivmiit.learning.tools;
 import ru.kpfu.ivmiit.learning.tools.core.MaterialsResolver;
 import ru.kpfu.ivmiit.learning.tools.core.TestProvider;
 import ru.kpfu.ivmiit.learning.tools.dao.UsersDao;
-import ru.kpfu.ivmiit.learning.tools.models.Answers;
-import ru.kpfu.ivmiit.learning.tools.models.LoginData;
-import ru.kpfu.ivmiit.learning.tools.models.Test;
-import ru.kpfu.ivmiit.learning.tools.models.User;
+import ru.kpfu.ivmiit.learning.tools.models.*;
+
+import java.util.List;
 
 /**
  * @author Marsel Sidikov (Kazan Federal University)
@@ -41,17 +40,39 @@ public class AdaptiveLearningServiceFacadeImpl implements AdaptiveLearningServic
 
 	@Override
 	public User getProfile(String userToken) {
-		return null;
+		return usersDao.getProfile();
 	}
 
-	@Override
+    @Override
+    public Material getMaterial(int id, String userToken) {
+        List<Integer> materialIds = usersDao.getMaterials(userToken);
+        if (materialIds.contains(id)) {
+            return MaterialsResolver.getMaterial(id);
+        } else throw new IllegalArgumentException();
+    }
+
+    @Override
+    public boolean changeMaterial(int id, String userToken) {
+        int alternativeMaterialId = materialsResolver.getAlternativeMaterial(id);
+        if (alternativeMaterialId != -1) {
+            usersDao.changeCurrentMaterial(userToken, alternativeMaterialId);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
 	public Test getTest(String userToken) {
-		usersDao.get
-		return testProvider.getTest()
+        List<Integer> userResults = usersDao.getAllResults(userToken);
+        return testProvider.getTest(userResults);
 	}
 
 	@Override
 	public void answersSubmit(String userToken, Answers answers) {
-
+        int result = TestProvider.getResult(userToken, answers);
+        List<Integer> oldUserResults = usersDao.getAllResults(userToken);
+        Material newMaterial = materialsResolver.getNewMaterial(result, oldUserResults);
+        usersDao.answersSubmit(userToken, answers);
+        usersDao.addNewMaterial(userToken, newMaterail);
 	}
 }
