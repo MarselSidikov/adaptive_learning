@@ -18,27 +18,35 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class AdaptiveLearningServiceFacadeImplTest {
 
+	// тестируемый объект
 	AdaptiveLearningServiceFacadeImpl serviceFacade;
 
+	// подменяемый интерфейс
 	@Mock
 	UsersDao usersDao;
 
+	// тестовые данные
 	LoginData testLoginData = new LoginData();
 
 	@Before
 	public void setUp() throws Exception {
+
+		// создала объект, привязала зависимость
 		serviceFacade = new AdaptiveLearningServiceFacadeImpl();
 		serviceFacade.usersDao = usersDao;
 
-		when(usersDao.login(any(LoginData.class))).thenThrow(IllegalArgumentException.class);
-				when(usersDao.login(testLoginData)).thenReturn("12345");
+		// пишешь временную реализацию:
+		// когда у usersDao вызывается метод login на testLoginData мы должны вернуть 12345
+		when(usersDao.login(testLoginData)).thenReturn("12345");
 	}
 
+	// тест
 	@Test
 	public void testLogin() throws Exception {
+		// получили данные от фасада
 		String actual = serviceFacade.login(testLoginData);
-		verify(usersDao.login(testLoginData));
 
+		// проверяем возвращенный результат
 		assertEquals("12345", actual);
 	}
 }
