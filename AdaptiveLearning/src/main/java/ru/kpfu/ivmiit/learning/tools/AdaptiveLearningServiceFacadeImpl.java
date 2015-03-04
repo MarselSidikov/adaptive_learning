@@ -5,10 +5,11 @@ import ru.kpfu.ivmiit.learning.tools.core.TestProvider;
 import ru.kpfu.ivmiit.learning.tools.dao.UsersDao;
 import ru.kpfu.ivmiit.learning.tools.models.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 /**
- * @author Marsel Sidikov (Kazan Federal University) and ZulfatMiftakhutdinov (Kazan Federal University)
+ * @author Marsel Sidikov, ZulfatMiftakhutdinov, Igor Lebedenko (Kazan Federal University)
  */
 public class AdaptiveLearningServiceFacadeImpl implements AdaptiveLearningServiceFacade {
 
@@ -18,7 +19,22 @@ public class AdaptiveLearningServiceFacadeImpl implements AdaptiveLearningServic
 
 	TestProvider testProvider;
 
-	@Override
+    @Autowired
+    public void setUsersDao(UsersDao usersDao) {
+        this.usersDao = usersDao;
+    }
+
+    @Autowired
+    public void setMaterialsResolver(MaterialsResolver materialsResolver) {
+        this.materialsResolver = materialsResolver;
+    }
+
+    @Autowired
+    public void setTestProvider(TestProvider testProvider) {
+        this.testProvider = testProvider;
+    }
+
+    @Override
 	public String login(LoginData data) {
 		return usersDao.login(data);
 	}
