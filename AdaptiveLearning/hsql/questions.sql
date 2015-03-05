@@ -1,0 +1,1 @@
+CREATE TABLE Questions (id INT , question VARCHAR(100), related_material_id INT, correct_answer INT, PRIMARY KEY (id), FOREIGN KEY (related_material_id) REFERENCES Materials(id))
