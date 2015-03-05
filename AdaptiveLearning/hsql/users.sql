@@ -1,0 +1,1 @@
+CREATE TABLE Users (id INT , first_name VARCHAR(30), last_name VARCHAR(30), login VARCHAR(30), pass_hash VARCHAR(20), materials_id INT, result INT, PRIMARY KEY (id), FOREIGN KEY (materials_id)  REFERENCES Materials(id))

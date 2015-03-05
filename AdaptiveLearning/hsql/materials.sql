@@ -1,0 +1,1 @@
+CREATE TABLE Materials (id INT , text VARCHAR(1000), alternative_material_id INT, PRIMARY KEY (id))
