@@ -1,11 +1,39 @@
 package ru.kpfu.ivmiit.learning.tools.models;
 
 public class User {
-  String name;
-  String lastname;
-  ArrayList<Material> userMaterial;
-  LoginData userLogin;
+  private String name;
+  private String lastname;
+  private ArrayList<Material> userMaterial;
+  private LoginData userLogin;
+  public void setName(String name){
+    this.name = name;
+  }
+  public void setLastName(String lastname){
+    this.lastname = lastname;
+  }
+  public void setMaterial(ArrayList<Material> userMaterial){
+    this.userMaterial = new ArrayList<Material>();
+    this.userMaterial = userMaterial;
+  }
+  public void setUserLogin(String login, String password){
+    userLogin = new LoginData();
+    userLogin.setLogin(login);
+    userLogin.setPassword(password);
+  }
+  public String getName(){
+   return name; 
+  }
+  public String lastname(){
+    return lastname;
+  }
+  public ArrayList<Material> getMaterial(){
+    return userMaterial;
+  }
+  public LoginData getLoginData(){
+    return userLogin;
+  }
   public User(){
     userMaterial = new ArrayList<Material>();
+    userData = new LoginData();
   }
 }
