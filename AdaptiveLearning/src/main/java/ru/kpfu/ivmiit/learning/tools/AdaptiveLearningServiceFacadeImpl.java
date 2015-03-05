@@ -13,11 +13,11 @@ import java.util.List;
  */
 public class AdaptiveLearningServiceFacadeImpl implements AdaptiveLearningServiceFacade {
 
-	UsersDao usersDao;
+	private UsersDao usersDao;
 
-	MaterialsResolver materialsResolver;
+	private MaterialsResolver materialsResolver;
 
-	TestProvider testProvider;
+	private TestProvider testProvider;
 
     @Autowired
     public void setUsersDao(UsersDao usersDao) {

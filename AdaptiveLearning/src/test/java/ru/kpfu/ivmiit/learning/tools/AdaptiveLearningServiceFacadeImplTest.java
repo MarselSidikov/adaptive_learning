@@ -11,6 +11,7 @@ import ru.kpfu.ivmiit.learning.tools.models.LoginData;
 import ru.kpfu.ivmiit.learning.tools.models.User;
 
 
+import static junit.framework.Assert.assertTrue;
 import static junit.framework.TestCase.assertEquals;
 import static org.mockito.Matchers.any;
 
@@ -21,71 +22,58 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class AdaptiveLearningServiceFacadeImplTest {
 
-	// тестируемый объект
 	AdaptiveLearningServiceFacadeImpl serviceFacade;
 
-	// подменяемый интерфейс
 	@Mock
 	UsersDao usersDao;
 
-	// тестовые данные
+    // TODO: refactor, when models was created more correctly
 	LoginData testLoginData = new LoginData();
     String testLogin = new String();
-    String testUserToken = new String();
+    String testUserToken = "userToken";
     User testSignUp = new User();
     String testGetProfile = new String();
 
 	@Before
 	public void setUp() throws Exception {
 
-		// создала объект, привязала зависимость
+        // TODO: refactor for Spring usage
 		serviceFacade = new AdaptiveLearningServiceFacadeImpl();
-		serviceFacade.usersDao = usersDao;
+		serviceFacade.setUsersDao(usersDao);
 
-		// пишешь временную реализацию:
-		// когда у usersDao вызывается метод login на testLoginData мы должны вернуть 12345
+        // TODO: refactor with throws
 		when(usersDao.login(testLoginData)).thenReturn("12345");
-        // когда у usersDao вызывается метод checkLogin на testLogin мы должны вернуть true
+
         when(usersDao.checkLogin(testLogin)).thenReturn(true);
-        // когда у usersDao вызывается метод logout на testUserToken мы должны вернуть id
-        when(usersDao.logout(testUserToken)).thenReturn();
-        // когда у usersDao вызывается метод signUp на testSignUp мы должны вернуть Name
+
         when(usersDao.signUp(testSignUp)).thenReturn("Name");
-        // когда у usersDao вызывается метод getProfile на testGetProfile мы должны вернуть null
+
         when(usersDao.getProfile(testGetProfile)).thenReturn(null);
 	}
 
-	// тест
+
 	@Test
 	public void testLogin() throws Exception {
-		// получили данные от фасада
 		String actual = serviceFacade.login(testLoginData);
-
-		// проверяем возвращенный результат
 		assertEquals("12345", actual);
 	}
     @Test
     public  void testCheckLogin() throws Exception {
-        Boolean actual = serviceFacade.checkLogin(testLogin);
-
-        assertEquals((Object) true, actual);
+        assertTrue(serviceFacade.checkLogin(testLogin));
     }
     @Test
     public  void testLogOut() throws Exception {
-        String actual = serviceFacade.logout(testUserToken);
-
-        assertEquals("12345", actual);
+        serviceFacade.logout(testUserToken);
+        verify(usersDao).logout(testUserToken);
     }
     @Test
     public  void testSignUp() throws Exception {
         String actual = serviceFacade.signUp(testSignUp);
-
-        assertEquals("name", actual);
+        assertEquals("Name", actual);
     }
     @Test
     public  void testGetProfile() throws Exception {
         User actual = serviceFacade.getProfile(testGetProfile);
-
         assertEquals(null, actual);
     }
 

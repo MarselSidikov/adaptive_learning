@@ -11,7 +11,7 @@ import java.util.List;
  *
  */
 public class SimpleMaterialsGraphResolver implements MaterialsResolver {
-    MaterialsDao materialsDao;
+    private MaterialsDao materialsDao;
 
     @Autowired
     public void setMaterialsDao(MaterialsDao materialsDao) {

@@ -1,5 +1,10 @@
 package ru.kpfu.ivmiit.learning.tools.models;
 
+import java.util.ArrayList;
+
+/**
+ * @author Ilnar Ramazanov (Kazan Federal University)
+ */
 public class Test {
   private ArrayList<String> questions;
     public Test(){

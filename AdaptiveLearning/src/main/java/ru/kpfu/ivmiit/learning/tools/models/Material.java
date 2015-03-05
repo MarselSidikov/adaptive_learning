@@ -1,11 +1,11 @@
 package ru.kpfu.ivmiit.learning.tools.models;
 
 /**
- * Created by Зульфат on 03.03.2015.
+ * @author Ilnar Ramazanov (Kazan Federal University)
  */
 public class Material {
   private String textOfMaterial;
-  public void setMaterial(textOfMaterial){
+  public void setMaterial(String textOfMaterial){
     this.textOfMaterial = textOfMaterial;
   }
 }

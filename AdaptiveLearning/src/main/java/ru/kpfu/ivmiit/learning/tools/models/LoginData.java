@@ -1,5 +1,8 @@
 package ru.kpfu.ivmiit.learning.tools.models;
 
+/**
+ * @author Ilnar Ramazanov (Kazan Federal University)
+ */
 public class LoginData {
   private String login;
   private String password;

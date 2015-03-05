@@ -3,8 +3,7 @@ package ru.kpfu.ivmiit.learning.tools;
 import ru.kpfu.ivmiit.learning.tools.models.*;
 
 /**
- * @author Sidikov Marsel (Kazan Federal University)
- *
+ * @author Sidikov Marsel, ZulfatMiftakhutdinov (Kazan Federal University)
  */
 public interface AdaptiveLearningServiceFacade {
 

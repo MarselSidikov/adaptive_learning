@@ -1,5 +1,10 @@
 package ru.kpfu.ivmiit.learning.tools.models;
 
+import java.util.ArrayList;
+
+/**
+ * @author Ilnar Ramazanov (Kazan Federal University)
+ */
 public class User {
   private String name;
   private String lastname;
@@ -34,6 +39,6 @@ public class User {
   }
   public User(){
     userMaterial = new ArrayList<Material>();
-    userData = new LoginData();
+    userLogin = new LoginData();
   }
 }
