@@ -1,0 +1,1 @@
+CREATE TABLE Lessons (id INT ,covered_topics VARCHAR (500),name VARCHAR (30), text VARCHAR(1000),comlexity DOUBLE , alternative_material_id INT, PRIMARY KEY (id))

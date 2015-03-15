@@ -1,1 +1,2 @@
-CREATE TABLE Users (id INT , first_name VARCHAR(30), last_name VARCHAR(30), login VARCHAR(30), pass_hash VARCHAR(20), materials_id INT, result INT, PRIMARY KEY (id), FOREIGN KEY (materials_id)  REFERENCES Materials(id))
+CREATE TABLE STUDENTS (id INT , first_name VARCHAR(30), last_name VARCHAR(30), login VARCHAR(30), pass_hash VARCHAR(20), current_lesson_id INT,
+knowledge_vector VARCHAR (500),educability DOUBLE,lessons VARCHAR (500), PRIMARY KEY (id), FOREIGN KEY (current_lesson_id)  REFERENCES Lessons(id))
