@@ -1,6 +1,7 @@
 package ru.kpfu.ivmiit.learning.tools.core;
 
 import ru.kpfu.ivmiit.learning.tools.models.Answers;
+import ru.kpfu.ivmiit.learning.tools.models.Result;
 import ru.kpfu.ivmiit.learning.tools.models.Test;
 
 import java.util.List;
@@ -13,11 +14,11 @@ public interface TestProvider {
     /**
      *
      * @param results users previous test results
-     * @param materialId
-     * @throws java.lang.IllegalArgumentException if materialId is invalid
-     * @return test for the current material
+     * @param lessonId
+     * @throws java.lang.IllegalArgumentException if lessonId is invalid
+     * @return test for the current material also based on last test results
      */
-    Test getTest(List<Integer> results,int materialId);
+    Test getTest(List<Result> results,int lessonId);
 
 
     /**
@@ -27,5 +28,5 @@ public interface TestProvider {
      * @throws java.lang.IllegalArgumentException if userToken or answers are invalid
      * @return estimate of the test
      */
-    int getResult(String userToken,Answers answers);
+    Result getResult(String userToken,Answers answers);
 }

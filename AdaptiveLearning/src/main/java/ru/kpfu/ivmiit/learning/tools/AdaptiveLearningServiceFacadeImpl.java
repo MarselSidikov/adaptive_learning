@@ -1,8 +1,8 @@
 package ru.kpfu.ivmiit.learning.tools;
 
-import ru.kpfu.ivmiit.learning.tools.core.MaterialsResolver;
+import ru.kpfu.ivmiit.learning.tools.core.LessonsResolver;
 import ru.kpfu.ivmiit.learning.tools.core.TestProvider;
-import ru.kpfu.ivmiit.learning.tools.dao.UsersDao;
+import ru.kpfu.ivmiit.learning.tools.dao.StudentsDao;
 import ru.kpfu.ivmiit.learning.tools.models.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,20 +13,20 @@ import java.util.List;
  */
 public class AdaptiveLearningServiceFacadeImpl implements AdaptiveLearningServiceFacade {
 
-	private UsersDao usersDao;
+	private StudentsDao studentsDao;
 
-	private MaterialsResolver materialsResolver;
+	private LessonsResolver lessonsResolver;
 
 	private TestProvider testProvider;
 
     @Autowired
-    public void setUsersDao(UsersDao usersDao) {
-        this.usersDao = usersDao;
+    public void setStudentsDao(StudentsDao studentsDao) {
+        this.studentsDao = studentsDao;
     }
 
     @Autowired
-    public void setMaterialsResolver(MaterialsResolver materialsResolver) {
-        this.materialsResolver = materialsResolver;
+    public void setLessonsResolver(LessonsResolver lessonsResolver) {
+        this.lessonsResolver = lessonsResolver;
     }
 
     @Autowired
@@ -36,42 +36,42 @@ public class AdaptiveLearningServiceFacadeImpl implements AdaptiveLearningServic
 
     @Override
 	public String login(LoginData data) {
-		return usersDao.login(data);
+		return studentsDao.login(data);
 	}
 
 	@Override
 	public boolean checkLogin(String login) {
-		return usersDao.checkLogin(login);
+		return studentsDao.checkLogin(login);
 	}
 
 	@Override
 	public void logout(String userToken) {
-		usersDao.logout(userToken);
+		studentsDao.logout(userToken);
 	}
 
 	@Override
-	public String signUp(User user) {
-		return usersDao.signUp(user);
+	public String signUp(Student student) {
+		return studentsDao.signUp(student);
 	}
 
 	@Override
-	public User getProfile(String userToken) {
-		return usersDao.getProfile(userToken);
+	public Student getProfile(String userToken) {
+		return studentsDao.getProfile(userToken);
 	}
 
     @Override
-    public Material getMaterial(int id, String userToken) {
-        List<Integer> materialIds = usersDao.getMaterials(userToken);
+    public Lesson getMaterial(int id, String userToken) {
+        List<Integer> materialIds = studentsDao.getLessons(userToken);
         if (materialIds.contains(id)) {
-            return materialsResolver.getMaterial(id);
+            return lessonsResolver.getMaterial(id);
         } else throw new IllegalArgumentException();
     }
 
     @Override
     public boolean changeMaterial(int id, String userToken) {
-        int alternativeMaterialId = materialsResolver.getAlternativeMaterial(id);
+        int alternativeMaterialId = lessonsResolver.getAlternativeLesson(id);
         if (alternativeMaterialId != -1) {
-            usersDao.changeCurrentMaterial(userToken, alternativeMaterialId);
+            studentsDao.changeCurrentLesson(userToken, alternativeMaterialId);
             return true;
         }
         return false;
@@ -79,17 +79,17 @@ public class AdaptiveLearningServiceFacadeImpl implements AdaptiveLearningServic
 
     @Override
 	public Test getTest(String userToken) {
-        List<Integer> userResults = usersDao.getAllResults(userToken);
-        int currentMaterialId = usersDao.getMaterials(userToken).get(0);
+        List<Result> userResults = studentsDao.getAllResults(userToken);
+        int currentMaterialId = studentsDao.getLessons(userToken).get(0);
         return testProvider.getTest(userResults,currentMaterialId);
 	}
 
 	@Override
 	public void answersSubmit(String userToken, Answers answers) {
-        int result = testProvider.getResult(userToken, answers);
-        List<Integer> oldUserResults = usersDao.getAllResults(userToken);
-        int newMaterial = materialsResolver.getNewMaterial(result, oldUserResults);
-        usersDao.answersSubmit(userToken, result);
-        usersDao.addNewMaterial(userToken, newMaterial);
+        Result result = testProvider.getResult(userToken, answers);
+        List<Result> oldUserResults = studentsDao.getAllResults(userToken);
+        int newLesson = lessonsResolver.getNewLesson(oldUserResults);
+        studentsDao.answersSubmit(userToken, result);
+        studentsDao.addNewLesson(userToken, newLesson);
 	}
 }

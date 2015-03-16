@@ -34,11 +34,11 @@ public interface AdaptiveLearningServiceFacade {
 
     /**
      *
-     * @param user
-     * @return token of user
-     * @throws java.lang.IllegalArgumentException if some of user-data is not valid
+     * @param student
+     * @return token of student
+     * @throws java.lang.IllegalArgumentException if some of student-data is not valid
      */
-    String signUp(User user);
+    String signUp(Student student);
 
     /**
      *
@@ -46,7 +46,7 @@ public interface AdaptiveLearningServiceFacade {
      * @return information of user with userToken
      * @throws java.lang.IllegalArgumentException if user with this token is not exist
      */
-    User getProfile(String userToken);
+    Student getProfile(String userToken);
 
     /**
      *
@@ -54,7 +54,7 @@ public interface AdaptiveLearningServiceFacade {
      * @param userToken
      * @return
      */
-    Material getMaterial(int id, String userToken);
+    Lesson getMaterial(int id, String userToken);
 
     /**
      *

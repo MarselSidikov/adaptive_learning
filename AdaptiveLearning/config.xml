@@ -12,7 +12,7 @@
     <bean id="adaptiveLearningServiceFacadeImpl" class="ru.kpfu.ivmiit.learning.tools.AdaptiveLearningServiceFacadeImpl">
     </bean>
 
-    <bean id="simpleMaterialsGraphResolver" class="ru.kpfu.ivmiit.learning.tools.core.SimpleMaterialsGraphResolver">
+    <bean id="simpleMaterialsGraphResolver" class="ru.kpfu.ivmiit.learning.tools.core.SimpleLessonsGraphResolver">
     </bean>
 
 </beans>

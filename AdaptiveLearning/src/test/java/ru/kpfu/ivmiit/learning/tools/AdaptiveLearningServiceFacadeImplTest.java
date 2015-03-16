@@ -1,21 +1,19 @@
 package ru.kpfu.ivmiit.learning.tools;
 
-import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import ru.kpfu.ivmiit.learning.tools.dao.UsersDao;
+import ru.kpfu.ivmiit.learning.tools.dao.StudentsDao;
 import ru.kpfu.ivmiit.learning.tools.models.LoginData;
-import ru.kpfu.ivmiit.learning.tools.models.User;
+import ru.kpfu.ivmiit.learning.tools.models.Student;
 
 
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.TestCase.assertEquals;
 import static org.mockito.Matchers.any;
 
-import static org.mockito.Mockito.stubVoid;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -25,13 +23,13 @@ public class AdaptiveLearningServiceFacadeImplTest {
 	AdaptiveLearningServiceFacadeImpl serviceFacade;
 
 	@Mock
-	UsersDao usersDao;
+    StudentsDao studentsDao;
 
     // TODO: refactor, when models was created more correctly
 	LoginData testLoginData = new LoginData();
     String testLogin = new String();
     String testUserToken = "userToken";
-    User testSignUp = new User();
+    Student testSignUp = new Student();
     String testGetProfile = new String();
 
 	@Before
@@ -39,16 +37,16 @@ public class AdaptiveLearningServiceFacadeImplTest {
 
         // TODO: refactor for Spring usage
 		serviceFacade = new AdaptiveLearningServiceFacadeImpl();
-		serviceFacade.setUsersDao(usersDao);
+		serviceFacade.setStudentsDao(studentsDao);
 
         // TODO: refactor with throws
-		when(usersDao.login(testLoginData)).thenReturn("12345");
+		when(studentsDao.login(testLoginData)).thenReturn("12345");
 
-        when(usersDao.checkLogin(testLogin)).thenReturn(true);
+        when(studentsDao.checkLogin(testLogin)).thenReturn(true);
 
-        when(usersDao.signUp(testSignUp)).thenReturn("Name");
+        when(studentsDao.signUp(testSignUp)).thenReturn("Name");
 
-        when(usersDao.getProfile(testGetProfile)).thenReturn(null);
+        when(studentsDao.getProfile(testGetProfile)).thenReturn(null);
 	}
 
 
@@ -64,7 +62,7 @@ public class AdaptiveLearningServiceFacadeImplTest {
     @Test
     public  void testLogOut() throws Exception {
         serviceFacade.logout(testUserToken);
-        verify(usersDao).logout(testUserToken);
+        verify(studentsDao).logout(testUserToken);
     }
     @Test
     public  void testSignUp() throws Exception {
@@ -73,7 +71,7 @@ public class AdaptiveLearningServiceFacadeImplTest {
     }
     @Test
     public  void testGetProfile() throws Exception {
-        User actual = serviceFacade.getProfile(testGetProfile);
+        Student actual = serviceFacade.getProfile(testGetProfile);
         assertEquals(null, actual);
     }
 
