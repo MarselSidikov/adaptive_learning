@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ru.kpfu.ivmiit.learning.tools.dao.LessonsDao;
 import ru.kpfu.ivmiit.learning.tools.models.Lesson;
 import ru.kpfu.ivmiit.learning.tools.models.Result;
+import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.SparkConf;
 
 import java.util.List;
 import java.util.Map;
@@ -13,8 +16,15 @@ import java.util.Map;
  *
  */
 public class SimpleLessonsGraphResolver implements LessonsResolver {
+    private SparkConf conf;
+    private JavaSparkContext sc;
     private double levels[];
     private LessonsDao lessonsDao;
+
+    public SimpleLessonsGraphResolver() {
+        conf = new SparkConf().setAppName("AdaptiveLearning").setMaster("local");
+        sc = new JavaSparkContext(conf);
+    }
 
     @Autowired
     public void setLessonsDao(LessonsDao lessonsDao) {
@@ -32,11 +42,14 @@ public class SimpleLessonsGraphResolver implements LessonsResolver {
     }
 
 
-
-    public int getNewLesson(Result[] results) {
+    private JavaRDD<Result> getJavaRDDFromResultList (List<Result> result) {
+        return sc.parallelize(result);
+    }
+    public int getNewLesson(List<Result> results) {
         double sumOfCorrectAnswerComplexities=0;
         double testComplexity=0;
         double mark;
+        JavaRDD<Result> RDDResult = getJavaRDDFromResultList(results);
         Map<Integer,List<String>> testResDict;
         for (Result testRes:results) {
             testResDict = testRes.getResults();
