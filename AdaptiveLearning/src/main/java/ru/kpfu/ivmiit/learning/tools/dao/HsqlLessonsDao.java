@@ -1,5 +1,8 @@
 package ru.kpfu.ivmiit.learning.tools.dao;
 
+import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.sql.api.java.JavaSQLContext;
+import ru.kpfu.ivmiit.learning.tools.SCSingletone;
 import ru.kpfu.ivmiit.learning.tools.models.Lesson;
 
 /**
@@ -19,6 +22,9 @@ public class HsqlLessonsDao implements LessonsDao {
 
     @Override
     public int getLessonWithComplexity(Double complexity) {
+        JavaSparkContext sc = SCSingletone.getInstance().getSparkContext();
+
+        JavaSQLContext sqlContext = new JavaSQLContext(sc);
         return 0;
     }
 }

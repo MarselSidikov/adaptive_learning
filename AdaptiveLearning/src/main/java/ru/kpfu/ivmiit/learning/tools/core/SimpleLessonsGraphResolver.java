@@ -1,6 +1,7 @@
 package ru.kpfu.ivmiit.learning.tools.core;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import ru.kpfu.ivmiit.learning.tools.SCSingletone;
 import ru.kpfu.ivmiit.learning.tools.dao.LessonsDao;
 import ru.kpfu.ivmiit.learning.tools.models.Lesson;
 import ru.kpfu.ivmiit.learning.tools.models.Result;
@@ -16,23 +17,20 @@ import java.util.Map;
  *
  */
 public class SimpleLessonsGraphResolver implements LessonsResolver {
-    private SparkConf conf;
     private JavaSparkContext sc;
     private double levels[];
     private LessonsDao lessonsDao;
 
     public SimpleLessonsGraphResolver() {
-        conf = new SparkConf().setAppName("AdaptiveLearning").setMaster("local");
-        sc = new JavaSparkContext(conf);
+        sc = SCSingletone.getInstance().getSparkContext();
     }
 
     @Autowired
     public void setLessonsDao(LessonsDao lessonsDao) {
         this.lessonsDao = lessonsDao;
     }
-
     @Override
-    public Lesson getMaterial(int id) {
+    public Lesson getLesson(int id) {
         return null;
     }
 

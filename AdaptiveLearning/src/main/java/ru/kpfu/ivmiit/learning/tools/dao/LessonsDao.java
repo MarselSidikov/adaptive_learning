@@ -1,5 +1,6 @@
 package ru.kpfu.ivmiit.learning.tools.dao;
 
+import org.apache.spark.api.java.JavaRDD;
 import ru.kpfu.ivmiit.learning.tools.models.Lesson;
 
 /**

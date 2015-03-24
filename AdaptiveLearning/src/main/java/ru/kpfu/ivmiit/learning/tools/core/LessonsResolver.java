@@ -17,7 +17,7 @@ public interface LessonsResolver {
      * @throws java.lang.IllegalArgumentException if id is invalid
      * @return material
      */
-    Lesson getMaterial(int id);
+    Lesson getLesson(int id);
 
 
     /**
@@ -31,9 +31,8 @@ public interface LessonsResolver {
 
     /**
      *
-     * @param result result for current material test
-     * @param oldResults results for previous tests
-     * @return next material that best fit for user
+     * @param results results tests
+     * @return next lesson that best fit for user
      */
     int getNewLesson(List<Result> results);
 }

@@ -63,7 +63,7 @@ public class AdaptiveLearningServiceFacadeImpl implements AdaptiveLearningServic
     public Lesson getMaterial(int id, String userToken) {
         List<Integer> materialIds = studentsDao.getLessons(userToken);
         if (materialIds.contains(id)) {
-            return lessonsResolver.getMaterial(id);
+            return lessonsResolver.getLesson(id);
         } else throw new IllegalArgumentException();
     }
 
