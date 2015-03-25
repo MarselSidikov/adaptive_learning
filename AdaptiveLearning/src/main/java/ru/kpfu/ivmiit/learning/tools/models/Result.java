@@ -20,16 +20,16 @@ public class Result {
         Map<Integer,List<String>> resultsDictionary = new HashMap<Integer, List<String>>();
         String [] answersArray = Res.split(";");
         int questionId;
-        boolean isCorrect;
-        double questionComplexity;
+        String isCorrect;
+        String questionComplexity;
         List<String> arr;
         for (String ans:answersArray) {
             questionId = Integer.parseInt(ans.split(":")[0]);
-            isCorrect = Integer.parseInt(ans.split(":")[1])!=0;
-            questionComplexity = Double.parseDouble(ans.split(":")[2]);
+            isCorrect = ans.split(":")[1];
+            questionComplexity = ans.split(":")[2];
             arr = new LinkedList<String>();
-            arr.add(Boolean.toString(isCorrect));
-            arr.add(Double.toString(questionComplexity));
+            arr.add(isCorrect);
+            arr.add(questionComplexity);
             resultsDictionary.put(questionId,arr);
         }
         return resultsDictionary;
