@@ -31,7 +31,7 @@ public class SimpleLessonsGraphResolver implements LessonsResolver {
     }
     @Override
     public Lesson getLesson(int id) {
-        return null;
+        return lessonsDao.getLesson(id);
     }
 
     @Override
@@ -39,15 +39,16 @@ public class SimpleLessonsGraphResolver implements LessonsResolver {
         return lessonsDao.getAlternativeLesson(id);
     }
 
-
-    private JavaRDD<Result> getJavaRDDFromResultList (List<Result> result) {
-        return sc.parallelize(result);
+    public SimpleLessonsGraphResolver () {
+        levels = new double[3];
+        levels[0] = 0.55;
+        levels[1] = 0.70;
+        levels[2] = 0.85;
     }
     public int getNewLesson(List<Result> results) {
         double sumOfCorrectAnswerComplexities=0;
         double testComplexity=0;
         double mark;
-        JavaRDD<Result> RDDResult = getJavaRDDFromResultList(results);
         Map<Integer,List<String>> testResDict;
         for (Result testRes:results) {
             testResDict = testRes.getResults();

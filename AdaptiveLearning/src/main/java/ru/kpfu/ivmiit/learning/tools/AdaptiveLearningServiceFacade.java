@@ -78,5 +78,5 @@ public interface AdaptiveLearningServiceFacade {
      * @param answers
      * @throws java.lang.IllegalArgumentException if user with this token is not exist
      */
-    void answersSubmit(String userToken, Answers answers);
+    void answersSubmit(String userToken, Result answers);
 }

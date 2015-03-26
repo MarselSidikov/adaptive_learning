@@ -28,5 +28,5 @@ public interface TestProvider {
      * @throws java.lang.IllegalArgumentException if userToken or answers are invalid
      * @return estimate of the test
      */
-    Result getResult(String userToken,Answers answers);
+    Result getResult(String userToken,Result answers);
 }
