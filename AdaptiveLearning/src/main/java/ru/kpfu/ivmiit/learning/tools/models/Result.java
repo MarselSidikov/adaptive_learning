@@ -12,7 +12,7 @@ public class Result {
     private String Res;
     private int studentId;
     private int lessonId;
-    public int getStudentId (){return studentId};
+    public int getStudentId (){return studentId;}
     public int getLessonId () {return  lessonId;}
 
 

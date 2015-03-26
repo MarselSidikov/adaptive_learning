@@ -17,7 +17,7 @@ public interface LessonsResolver {
      * @throws java.lang.IllegalArgumentException if id is invalid
      * @return material
      */
-    Lesson getMaterial(int id);
+    Lesson getLesson(int id);
 
 
     /**

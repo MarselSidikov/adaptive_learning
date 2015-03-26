@@ -63,7 +63,7 @@ public class AdaptiveLearningServiceFacadeImpl implements AdaptiveLearningServic
     public Lesson getMaterial(int id, String userToken) {
         List<Integer> materialIds = studentsDao.getLessons(userToken);
         if (materialIds.contains(id)) {
-            return lessonsResolver.getMaterial(id);
+            return lessonsResolver.getLesson(id);
         } else throw new IllegalArgumentException();
     }
 
@@ -85,7 +85,7 @@ public class AdaptiveLearningServiceFacadeImpl implements AdaptiveLearningServic
 	}
 
 	@Override
-	public void answersSubmit(String userToken, Answers answers) {
+	public void answersSubmit(String userToken, Result answers) {
         Result result = testProvider.getResult(userToken, answers);
         List<Result> oldUserResults = studentsDao.getAllResults(userToken);
         int newLesson = lessonsResolver.getNewLesson(oldUserResults);

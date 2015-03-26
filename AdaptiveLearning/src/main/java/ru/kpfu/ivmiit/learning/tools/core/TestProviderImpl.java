@@ -17,7 +17,7 @@ public class TestProviderImpl implements TestProvider {
     }
 
     @Override
-    public Result getResult(String userToken, Answers answers) {
+    public Result getResult(String userToken, Result answers) {
         return null;
     }
 }

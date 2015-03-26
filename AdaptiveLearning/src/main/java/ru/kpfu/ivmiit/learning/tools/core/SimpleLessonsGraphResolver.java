@@ -22,8 +22,8 @@ public class SimpleLessonsGraphResolver implements LessonsResolver {
     }
 
     @Override
-    public Lesson getMaterial(int id) {
-        return null;
+    public Lesson getLesson(int id) {
+        return lessonsDao.getLesson(id);
     }
 
     @Override
@@ -31,9 +31,15 @@ public class SimpleLessonsGraphResolver implements LessonsResolver {
         return lessonsDao.getAlternativeLesson(id);
     }
 
+    public SimpleLessonsGraphResolver () {
+        levels = new double[3];
+        levels[0] = 0.55;
+        levels[1] = 0.70;
+        levels[2] = 0.85;
+    }
 
 
-    public int getNewLesson(Result[] results) {
+    public int getNewLesson(List<Result> results) {
         double sumOfCorrectAnswerComplexities=0;
         double testComplexity=0;
         double mark;
