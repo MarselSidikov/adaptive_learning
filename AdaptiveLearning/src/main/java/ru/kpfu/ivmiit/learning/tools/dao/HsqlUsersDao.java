@@ -3,26 +3,47 @@ package ru.kpfu.ivmiit.learning.tools.dao;
 import ru.kpfu.ivmiit.learning.tools.models.LoginData;
 import ru.kpfu.ivmiit.learning.tools.models.User;
 
+import org.springframework.jdbc.core.simple.SimpleJdbcDaoSupport;
 import java.util.List;
 
 /**
- * @author Sidikov Marsel (Kazan Federal University)
+ * @author Sidikov Marsel, Lebedenko Igor, Karpov Oleg (Kazan Federal University)
  *
  */
-public class HsqlUsersDao implements UsersDao {
+public class HsqlUsersDao extends SimpleJdbcDaoSupport implements UsersDao {
     @Override
     public String login(LoginData data) {
-        return null;
+        String login = data.getLogin();
+        String password = data.getPassword();
+
+        String sql = "SELECT COUNT(*) FROM Student WHERE login = :login AND passwHash = :password";
+        int count = getSimpleJdbcTemplate().queryForInt(sql, login, password);
+
+        if (count == 0) {
+            throw new IllegalArgumentException();
+        }
+
+        return login;
     }
 
     @Override
     public boolean checkLogin(String login) {
+        if (login == null) {
+            throw new IllegalArgumentException();
+        }
+
+        String sql = "SELECT COUNT(*) FROM Student WHERE login = :login";
+        int count = getSimpleJdbcTemplate().queryForInt(sql);
+
+        if (count == 0) {
+            return true;
+        }
+
         return false;
     }
 
     @Override
     public void logout(String userToken) {
-
     }
 
     @Override
