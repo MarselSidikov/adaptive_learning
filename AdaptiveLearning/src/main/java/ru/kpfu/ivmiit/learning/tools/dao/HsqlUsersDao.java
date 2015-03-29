@@ -33,7 +33,7 @@ public class HsqlUsersDao extends SimpleJdbcDaoSupport implements UsersDao {
         }
 
         String sql = "SELECT COUNT(*) FROM Student WHERE login = :login";
-        int count = getSimpleJdbcTemplate().queryForInt(sql);
+        int count = getSimpleJdbcTemplate().queryForInt(sql, login);
 
         if (count == 0) {
             return true;
