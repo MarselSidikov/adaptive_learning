@@ -11,12 +11,22 @@ import java.util.Collection;
 public class HsqlMaterialsDao implements MaterialsDao {
 
     @Override
-    public Material getMaterial(int id) {
+    public String getAlternativeMaterial(int id) {
         return null;
     }
 
     @Override
-    public int getAlternativeMaterial(int id) {
+    public String getBlockURLs(int lessonID) {
+        return null;
+    }
+
+    @Override
+    public int getNextLesson(int lessonID) {
         return 0;
+    }
+
+    @Override
+    public String getMainURL(int lessonID) {
+        return null;
     }
 }
