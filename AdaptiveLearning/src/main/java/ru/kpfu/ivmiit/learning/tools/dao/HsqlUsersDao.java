@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author Sidikov Marsel, Lebedenko Igor, Karpov Oleg (Kazan Federal University)
@@ -148,21 +149,59 @@ public class HsqlUsersDao extends SimpleJdbcDaoSupport implements UsersDao {
 
     @Override
     public String getCurrentURLs(String userToken) {
-        return null;
+        String sql = "SELECT currentURLs FROM Students WHERE userToken = :userToken";
+        String current = getSimpleJdbcTemplate().queryForObject(sql, String.class, userToken);
+        if (current != null) {
+            return current;
+        }
+        else {
+            throw new IllegalArgumentException();
+        }
     }
+
 
     @Override
     public int getCurrentLessonID(String userToken) {
-        return 0;
+        String sql = "SELECT (*) FROM Students WHERE userToken = :userToken";
+        int count = getSimpleJdbcTemplate().queryForInt(sql, userToken);
+        if (count == 1) {
+            sql = "SELECT currentLesson FROM Students WHERE userToken = :userToken";
+            return getSimpleJdbcTemplate().queryForInt(sql, userToken);
+                    }
+        else {
+            throw new IllegalArgumentException();
+        }
     }
 
     @Override
     public void setCurrentURLs(String userToken, String URLs) {
-
+        Map<String, String> paramMap = new HashMap<String, String>();
+        paramMap.put("userToken", userToken);
+        String sql = "SELECT COUNT(*) FROM Students WHERE userToken = :userToken";
+        int count = getSimpleJdbcTemplate().queryForInt(sql, paramMap);
+        if (count == 1) {
+            paramMap.put("URLs", URLs);
+            sql = "UPDATE Students SET currentURLs = :URLs WHERE userToken = :userToken";
+            getSimpleJdbcTemplate().update(sql, paramMap);
+        }
+        else {
+            throw new IllegalArgumentException();
+        }
     }
 
     @Override
     public void setLessonID(String userToken, int lessonID) {
-
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("userToken", userToken);
+        String sql = "SELECT COUNT(*) FROM Students WHERE userToken = :userToken";
+        int count = getSimpleJdbcTemplate().queryForInt(sql, paramMap);
+        if (count == 1) {
+            paramMap.put("lessonID", lessonID);
+            sql = "UPDATE Students SET currentLesson = :lessonID WHERE userToken = :userToken";
+            getSimpleJdbcTemplate().update(sql, paramMap);
+        }
+        else {
+            throw new IllegalArgumentException();
+        }
     }
 }
