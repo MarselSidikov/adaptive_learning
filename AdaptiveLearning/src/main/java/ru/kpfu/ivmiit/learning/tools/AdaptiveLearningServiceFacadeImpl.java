@@ -6,6 +6,8 @@ import ru.kpfu.ivmiit.learning.tools.dao.UsersDao;
 import ru.kpfu.ivmiit.learning.tools.models.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -60,18 +62,22 @@ public class AdaptiveLearningServiceFacadeImpl implements AdaptiveLearningServic
 	}
 
     @Override
-    public Material getMaterial(int id, String userToken) {
-        List<Integer> materialIds = usersDao.getMaterials(userToken);
-        if (materialIds.contains(id)) {
-            return materialsResolver.getMaterial(id);
-        } else throw new IllegalArgumentException();
+    public Material getMaterial(String userToken) {
+        String currentURLs = usersDao.getCurrentURLs(userToken);
+        String [] URLs = currentURLs.split(";");
+        List<String> URLsList = new LinkedList<String>();
+        for (String url:URLs) {
+            URLsList.add(url);
+        }
+        return new Material(URLsList);
     }
 
     @Override
-    public boolean changeMaterial(int id, String userToken) {
-        int alternativeMaterialId = materialsResolver.getAlternativeMaterial(id);
-        if (alternativeMaterialId != -1) {
-            usersDao.changeCurrentMaterial(userToken, alternativeMaterialId);
+    public boolean changeMaterial( String userToken) {
+        int currentLessonID = usersDao.getCurrentLessonID(userToken);
+        String alternativeMaterialURL = materialsResolver.getAlternativeMaterial(currentLessonID);
+        if (alternativeMaterialURL!=null) {
+            usersDao.setCurrentURLs( userToken, alternativeMaterialURL);
             return true;
         }
         return false;
@@ -85,11 +91,9 @@ public class AdaptiveLearningServiceFacadeImpl implements AdaptiveLearningServic
 	}
 
 	@Override
-	public void answersSubmit(String userToken, Answers answers) {
-        int result = testProvider.getResult(userToken, answers);
-        List<Integer> oldUserResults = usersDao.getAllResults(userToken);
-        int newMaterial = materialsResolver.getNewMaterial(result, oldUserResults);
-        usersDao.answersSubmit(userToken, result);
-        usersDao.addNewMaterial(userToken, newMaterial);
+	public void answersSubmit(String userToken, TestResult results) {
+        String currentURLs = materialsResolver.getNewMaterial(results);
+        usersDao.answersSubmit(userToken,results);
+        usersDao.setCurrentURLs(userToken,currentURLs);
 	}
 }

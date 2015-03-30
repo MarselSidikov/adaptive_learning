@@ -1,5 +1,6 @@
 package ru.kpfu.ivmiit.learning.tools.dao;
 import ru.kpfu.ivmiit.learning.tools.models.LoginData;
+import ru.kpfu.ivmiit.learning.tools.models.TestResult;
 import ru.kpfu.ivmiit.learning.tools.models.User;
 
 import java.util.Collection;
@@ -87,15 +88,40 @@ public interface UsersDao {
      * @throws java.lang.IllegalArgumentException if userToken is invalid
      * @return void
      */
-    void answersSubmit(String userToken,int result);
+    void answersSubmit(String userToken,TestResult result);
+
+    /**
+     *
+     * @param userToken
+     * @throws java.lang.IllegalArgumentException if id is invalid
+     * @return current material URLs (could be blocks, main)
+     */
+    public String getCurrentURLs(String userToken);
 
 
     /**
-     * adding new material to user with token = userToken
-     * @param materialId
+     *
      * @param userToken
-     * @throws java.lang.IllegalArgumentException if userToken is invalid
+     * @throws java.lang.IllegalArgumentException if id is invalid
+     * @return currentLessonID
+     */
+    public int getCurrentLessonID(String userToken);
+
+    /**
+     * sets current material url of user with userToken to URLs
+     * @param userToken
+     * @param URLs
+     * @throws java.lang.IllegalArgumentException if id is invalid
      * @return void
      */
-    void addNewMaterial(String userToken,int materialId);
+    public void setCurrentURLs (String userToken, String URLs);
+
+    /**
+     * sets lesson id for student with userToken to lessonId
+     * @param lessonID
+     * @param userToken
+     * @throws java.lang.IllegalArgumentException if id is invalid
+     * @return void
+     */
+    public void setLessonID (String userToken, int lessonID);
 }

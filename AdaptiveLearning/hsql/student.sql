@@ -1,1 +1,1 @@
-CREATE TABLE Users (id INT , first_name VARCHAR(30), last_name VARCHAR(30), login VARCHAR(30), pass_hash VARCHAR(20), materials_id INT, result INT, PRIMARY KEY (id), FOREIGN KEY (materials_id)  REFERENCES Materials(id))
+CREATE TABLE Students (id INT , firstName VARCHAR(30), lastName VARCHAR(30), login VARCHAR(30), passHash VARCHAR(20), currentLesson INT,userToken Varchar(100), currentURLs VARCHAR(1000) PRIMARY KEY (id), FOREIGN KEY (currentLesson)  REFERENCES Lessons(id))

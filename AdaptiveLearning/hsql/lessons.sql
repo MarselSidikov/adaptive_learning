@@ -1,1 +1,1 @@
-CREATE TABLE Materials (id INT , text VARCHAR(1000), alternative_material_id INT, PRIMARY KEY (id))
+CREATE TABLE Lessons (id INT , mainMatURL VARCHAR(100), extraMaterialURL VARCHAR (100), blockURLS VARCHAR (1000), blockTestIDs INT, mainTestIDs, PRIMARY KEY (id),FOREIGN KEY (mainTestID) REFERENCES Test (id),FOREIGN KEY (blockTestID) REFERENCES Test(id))

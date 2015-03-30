@@ -1,6 +1,7 @@
 package ru.kpfu.ivmiit.learning.tools.core;
 
-import ru.kpfu.ivmiit.learning.tools.models.Material;
+
+import ru.kpfu.ivmiit.learning.tools.models.TestResult;
 
 import java.util.List;
 
@@ -10,29 +11,20 @@ import java.util.List;
  */
 public interface MaterialsResolver {
 
-    /**
-     *
-     * @param id material id
-     * @throws java.lang.IllegalArgumentException if id is invalid
-     * @return material
-     */
-    Material getMaterial(int id);
-
 
     /**
      *
-     * @param id
-     * @throws java.lang.IllegalArgumentException if id is invalid
-     * @return alternativeMaterial for related theme
+     * @param lessonID lesson id
+     * @return returns alternative material(extra) for lesson with lessonID
      */
-    int getAlternativeMaterial(int id);
+    String getAlternativeMaterial(int lessonID);
 
 
     /**
      *
-     * @param result result for current material test
-     * @param oldResults results for previous tests
-     * @return next material that best fit for user
+     * @param result test results for current lesson
+     * @return if mistakes in test return those blocks that match to the incorrect questions
+     * otherwise returns next lesson main material
      */
-    int getNewMaterial(int result, List<Integer> oldResults);
+    String getNewMaterial(TestResult result);
 }

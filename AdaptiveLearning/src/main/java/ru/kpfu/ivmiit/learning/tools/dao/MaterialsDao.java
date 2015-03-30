@@ -10,13 +10,6 @@ import java.util.Collection;
  *
  */
 public interface MaterialsDao {
-    /**
-     *
-     * @param id material id
-     * @throws java.lang.IllegalArgumentException if id is invalid
-     * @return material
-     */
-    Material getMaterial(int id);
 
     /**
      *
@@ -24,5 +17,28 @@ public interface MaterialsDao {
      * @throws java.lang.IllegalArgumentException if id is invalid
      * @return alternativeMaterial for related theme
      */
-    int getAlternativeMaterial(int id);
+    String getAlternativeMaterial(int id);
+    /**
+     *
+     * @param lessonID lesson id
+     * @return returns document URLs for all blocks
+     * @throws java.lang.IllegalArgumentException if id is invalid
+     */
+    public String getBlockURLs (int lessonID);
+
+    /**
+     *
+     * @param lessonID lesson id
+     * @return returns next lesson for lesson with id = lessonID
+     * @throws java.lang.IllegalArgumentException if id is invalid
+     */
+    public int getNextLesson(int lessonID);
+
+    /**
+     *
+     * @param lessonID lesson id
+     * @return returns main document URL
+     * @throws java.lang.IllegalArgumentException if id is invalid
+     */
+    public String getMainURL (int lessonID);
 }

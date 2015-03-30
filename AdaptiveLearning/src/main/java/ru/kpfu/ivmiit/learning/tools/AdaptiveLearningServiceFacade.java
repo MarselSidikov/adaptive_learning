@@ -54,15 +54,14 @@ public interface AdaptiveLearningServiceFacade {
      * @param userToken
      * @return
      */
-    Material getMaterial(int id, String userToken);
+    Material getMaterial(String userToken);
 
     /**
      *
-     * @param id
      * @param userToken
-     * @return true, if alternative material is exist, false - otherwise
+     * @return true, if alternative material for student with userToken is exist, false - otherwise
      */
-    boolean changeMaterial(int id, String userToken);
+    boolean changeMaterial(String userToken);
 
     /**
      *
@@ -75,8 +74,9 @@ public interface AdaptiveLearningServiceFacade {
     /**
      *
      * @param userToken
-     * @param answers
+     * @param results
      * @throws java.lang.IllegalArgumentException if user with this token is not exist
+     * Submits test results for student with userToken and select new Material for student
      */
-    void answersSubmit(String userToken, Answers answers);
+    void answersSubmit(String userToken, TestResult results);
 }
