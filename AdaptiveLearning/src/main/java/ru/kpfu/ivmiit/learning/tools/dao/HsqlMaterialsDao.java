@@ -9,7 +9,7 @@ import java.util.Collection;
 /**
  * @author Marsel Sidikov (Kazan Federal University)
  */
-public class HsqlMaterialsDao extends SimpleJdbcDaoSupport  implements MaterialsDao {
+public class HsqlMaterialsDao extends SimpleJdbcDaoSupport implements MaterialsDao {
 
     @Override
     public String getAlternativeMaterial(int id) {
