@@ -7,19 +7,28 @@ import java.util.*;
  */
 public class TestResult {
 
-    public int getLessonID() {
-        return lessonID;
+    private int block;
+    private int mark;
+
+    public int getBlock() {
+        return block;
     }
 
-    public String getUserToken() {
-        return userToken;
+    public void setBlock(int block) {
+        this.block = block;
     }
 
-    int lessonID;
-    String userToken;
-    public Map<Integer, Boolean> getResult() {
-        return result;
+    public int getMark() {
+        return mark;
     }
 
-    private Map<Integer,Boolean> result;
+    public void setMark(int mark) {
+        this.mark = mark;
+    }
+
+    public TestResult(int block, int mark) {
+
+        this.block = block;
+        this.mark = mark;
+    }
 }
