@@ -1,1 +1,1 @@
-ALTER TABLE Questions add FOREIGN KEY(correct_answer) REFERENCES Answers(id)
+ALTER TABLE Questions add FOREIGN KEY(correctAnswerID) REFERENCES Answers(id)

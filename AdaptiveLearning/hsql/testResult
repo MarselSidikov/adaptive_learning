@@ -1,0 +1,1 @@
+CREATE TABLE TestResult (id INT , lessonID INT ,studentID INT ,block INT ,mark DOUBLE ,PRIMARY KEY (id), FOREIGN KEY (studentID) REFERENCES Student(id),FOREIGN KEY (lessonID) REFERENCES Lesson(id))
