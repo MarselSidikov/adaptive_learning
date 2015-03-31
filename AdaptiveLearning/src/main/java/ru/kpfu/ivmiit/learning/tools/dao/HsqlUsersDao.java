@@ -1,6 +1,7 @@
 package ru.kpfu.ivmiit.learning.tools.dao;
 
 import ru.kpfu.ivmiit.learning.tools.models.LoginData;
+import ru.kpfu.ivmiit.learning.tools.models.TestResult;
 import ru.kpfu.ivmiit.learning.tools.models.User;
 
 import org.springframework.jdbc.core.simple.SimpleJdbcDaoSupport;
@@ -11,6 +12,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author Sidikov Marsel, Lebedenko Igor, Karpov Oleg (Kazan Federal University)
@@ -23,7 +25,7 @@ public class HsqlUsersDao extends SimpleJdbcDaoSupport implements UsersDao {
         public LoginData mapRow(ResultSet resultSet, int i) throws SQLException {
             LoginData loginData = new LoginData();
             loginData.setLogin(resultSet.getString("login"));
-            loginData.setPassword(resultSet.getString("passwHash"));
+            loginData.setPassword(resultSet.getString("passHash"));
             return loginData;
         }
     };
@@ -32,7 +34,7 @@ public class HsqlUsersDao extends SimpleJdbcDaoSupport implements UsersDao {
         @Override
         public User mapRow(ResultSet resultSet, int i) throws SQLException {
             User user = new User();
-            user.setName(resultSet.getString("first_Name"));
+            user.setName(resultSet.getString("firstName"));
             user.setLastName(resultSet.getString("lastName"));
             user.setUserLogin(loginDataRowMapper.mapRow(resultSet, i).getLogin(),
                             loginDataRowMapper.mapRow(resultSet, i).getPassword());
@@ -47,7 +49,7 @@ public class HsqlUsersDao extends SimpleJdbcDaoSupport implements UsersDao {
         paramMap.put("login", data.getLogin());
         paramMap.put("password", data.getPassword());
 
-        String sql = "SELECT COUNT(*) FROM Student WHERE (login = :login AND passwHash = :password)";
+        String sql = "SELECT COUNT(*) FROM Students WHERE (login = :login AND passHash = :password)";
         int count = getSimpleJdbcTemplate().queryForInt(sql, paramMap);
 
         if (count == 1) {
@@ -61,7 +63,7 @@ public class HsqlUsersDao extends SimpleJdbcDaoSupport implements UsersDao {
             String userToken = sb.toString();
 
             paramMap.put("userToken", userToken);
-            sql = "UPDATE Student SET userToken = :userToken WHERE (login = :login AND passwHash = :password)";
+            sql = "UPDATE Students SET userToken = :userToken WHERE (login = :login AND passHash = :password)";
             getSimpleJdbcTemplate().update(sql, paramMap);
 
             return userToken;
@@ -77,7 +79,7 @@ public class HsqlUsersDao extends SimpleJdbcDaoSupport implements UsersDao {
             throw new IllegalArgumentException();
         }
 
-        String sql = "SELECT COUNT(*) FROM Student WHERE login = :login";
+        String sql = "SELECT COUNT(*) FROM Students WHERE login = :login";
         int count = getSimpleJdbcTemplate().queryForInt(sql, login);
 
         return count == 0;
@@ -90,15 +92,14 @@ public class HsqlUsersDao extends SimpleJdbcDaoSupport implements UsersDao {
         }
 
         Map<String, String> paramMap = new HashMap<String, String>();
-
         paramMap.put("userToken", userToken);
 
-        String sql = "SELECT COUNT(*) FROM Student WHERE userToken = :userToken";
+        String sql = "SELECT COUNT(*) FROM Students WHERE userToken = :userToken";
         int count = getSimpleJdbcTemplate().queryForInt(sql, paramMap);
 
         if (count == 1) {
             paramMap.put("newUserToken", "");
-            sql = "UPDATE Student SET userToken = :newUserToken WHERE userToken = :userToken";
+            sql = "UPDATE Students SET userToken = :newUserToken WHERE userToken = :userToken";
             getSimpleJdbcTemplate().update(sql, paramMap);
         }
         else {
@@ -114,7 +115,7 @@ public class HsqlUsersDao extends SimpleJdbcDaoSupport implements UsersDao {
     @Override
     public User getProfile(String userToken) {
         User user;
-        String sql = "SELECT (*) FROM Student WHERE userToken = :userToken";
+        String sql = "SELECT (*) FROM Students WHERE userToken = :userToken";
         user = getSimpleJdbcTemplate().queryForObject(sql, userRowMapper, userToken);
 
         if (user != null) {
@@ -132,7 +133,32 @@ public class HsqlUsersDao extends SimpleJdbcDaoSupport implements UsersDao {
 
     @Override
     public void changeCurrentMaterial(String userToken, int alternativeMaterialId) {
+        if (userToken == null) {
+            throw new IllegalArgumentException();
+        }
 
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("alternativeMaterialId", alternativeMaterialId);
+
+        String sql = "SELECT COUNT(*) FROM Lessons WHERE id = :alternativeMaterialId";
+        int count = getSimpleJdbcTemplate().queryForInt(sql, paramMap);
+
+        if (count == 1) {
+            sql = "SELECT COUNT(*) FROM Students WHERE userToken = :userToken";
+            count = getSimpleJdbcTemplate().queryForInt(sql, paramMap);
+
+            if (count == 1) {
+                paramMap.put("userToken", userToken);
+                sql = "UPDATE Students SET currentLesson = :alternativeMaterialId WHERE userToken = :userToken";
+                getSimpleJdbcTemplate().update(sql, paramMap);
+            }
+            else {
+                throw new IllegalArgumentException();
+            }
+        }
+        else {
+            throw new IllegalArgumentException();
+        }
     }
 
     @Override
@@ -141,12 +167,71 @@ public class HsqlUsersDao extends SimpleJdbcDaoSupport implements UsersDao {
     }
 
     @Override
-    public void answersSubmit(String userToken, int result) {
+    public void answersSubmit(String userToken, TestResult result) {
 
     }
 
     @Override
-    public void addNewMaterial(String userToken, int materialId) {
+    public String getCurrentURLs(String userToken) {
+        String sql = "SELECT currentURLs FROM Students WHERE userToken = :userToken";
+        String current = getSimpleJdbcTemplate().queryForObject(sql, String.class, userToken);
 
+        if (current != null) {
+            return current;
+        }
+        else {
+            throw new IllegalArgumentException();
+        }
+    }
+
+
+    @Override
+    public int getCurrentLessonID(String userToken) {
+        String sql = "SELECT (*) FROM Students WHERE userToken = :userToken";
+        int count = getSimpleJdbcTemplate().queryForInt(sql, userToken);
+
+        if (count == 1) {
+            sql = "SELECT currentLesson FROM Students WHERE userToken = :userToken";
+            return getSimpleJdbcTemplate().queryForInt(sql, userToken);
+                    }
+        else {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    @Override
+    public void setCurrentURLs(String userToken, String URLs) {
+        Map<String, String> paramMap = new HashMap<String, String>();
+        paramMap.put("userToken", userToken);
+
+        String sql = "SELECT COUNT(*) FROM Students WHERE userToken = :userToken";
+        int count = getSimpleJdbcTemplate().queryForInt(sql, paramMap);
+
+        if (count == 1) {
+            paramMap.put("URLs", URLs);
+            sql = "UPDATE Students SET currentURLs = :URLs WHERE userToken = :userToken";
+            getSimpleJdbcTemplate().update(sql, paramMap);
+        }
+        else {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    @Override
+    public void setLessonID(String userToken, int lessonID) {
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("userToken", userToken);
+
+        String sql = "SELECT COUNT(*) FROM Students WHERE userToken = :userToken";
+        int count = getSimpleJdbcTemplate().queryForInt(sql, paramMap);
+
+        if (count == 1) {
+            paramMap.put("lessonID", lessonID);
+            sql = "UPDATE Students SET currentLesson = :lessonID WHERE userToken = :userToken";
+            getSimpleJdbcTemplate().update(sql, paramMap);
+        }
+        else {
+            throw new IllegalArgumentException();
+        }
     }
 }
