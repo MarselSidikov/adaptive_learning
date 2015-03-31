@@ -18,4 +18,9 @@ public class LoginData {
   public String getPassword(){
     return password;
   }
+
+  public LoginData(String login, String password) {
+    this.login = login;
+    this.password = password;
+  }
 }
