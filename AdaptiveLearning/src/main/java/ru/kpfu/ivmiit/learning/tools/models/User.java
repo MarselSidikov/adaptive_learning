@@ -17,7 +17,6 @@ public class User {
     this.lastname = lastname;
   }
   public void setMaterial(ArrayList<Material> userMaterial){
-    this.userMaterial = new ArrayList<Material>();
     this.userMaterial = userMaterial;
   }
   public void setUserLogin(String login, String password){
@@ -28,7 +27,7 @@ public class User {
   public String getName(){
    return name; 
   }
-  public String lastname(){
+  public String getLastname(){
     return lastname;
   }
   public ArrayList<Material> getMaterial(){

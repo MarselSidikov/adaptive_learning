@@ -4,7 +4,10 @@ import ru.kpfu.ivmiit.learning.tools.models.LoginData;
 import ru.kpfu.ivmiit.learning.tools.models.User;
 
 import org.springframework.jdbc.core.simple.SimpleJdbcDaoSupport;
+import org.springframework.jdbc.core.RowMapper;
 import java.security.SecureRandom;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +17,29 @@ import java.util.Map;
  *
  */
 public class HsqlUsersDao extends SimpleJdbcDaoSupport implements UsersDao {
+
+    private RowMapper<LoginData> loginDataRowMapper = new RowMapper<LoginData>() {
+        @Override
+        public LoginData mapRow(ResultSet resultSet, int i) throws SQLException {
+            LoginData loginData = new LoginData();
+            loginData.setLogin(resultSet.getString("login"));
+            loginData.setPassword(resultSet.getString("passwHash"));
+            return loginData;
+        }
+    };
+
+    private RowMapper<User> userRowMapper = new RowMapper<User>() {
+        @Override
+        public User mapRow(ResultSet resultSet, int i) throws SQLException {
+            User user = new User();
+            user.setName(resultSet.getString("first_Name"));
+            user.setLastName(resultSet.getString("lastName"));
+            user.setUserLogin(loginDataRowMapper.mapRow(resultSet, i).getLogin(),
+                            loginDataRowMapper.mapRow(resultSet, i).getPassword());
+            return user;
+        }
+    };
+
     @Override
     public String login(LoginData data) {
         Map<String, String> paramMap = new HashMap<String, String>();
@@ -87,7 +113,16 @@ public class HsqlUsersDao extends SimpleJdbcDaoSupport implements UsersDao {
 
     @Override
     public User getProfile(String userToken) {
-        return null;
+        User user;
+        String sql = "SELECT (*) FROM Student WHERE userToken = :userToken";
+        user = getSimpleJdbcTemplate().queryForObject(sql, userRowMapper, userToken);
+
+        if (user != null) {
+            return user;
+        }
+        else {
+            throw new IllegalArgumentException();
+        }
     }
 
     @Override
