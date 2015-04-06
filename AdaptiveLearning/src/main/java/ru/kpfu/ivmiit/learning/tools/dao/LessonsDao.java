@@ -1,8 +1,8 @@
 package ru.kpfu.ivmiit.learning.tools.dao;
 
-import org.apache.spark.api.java.JavaRDD;
-import ru.kpfu.ivmiit.learning.tools.models.Lesson;
 
+import ru.kpfu.ivmiit.learning.tools.models.Lesson;
+import java.util.List;
 /**
  * @author Sidikov Marsel (Kazan Federal University)
  *
@@ -14,7 +14,7 @@ public interface LessonsDao {
      * @throws java.lang.IllegalArgumentException if id is invalid
      * @return material
      */
-    Lesson getLesson(int id);
+    public Lesson getLesson(int id);
 
     /**
      *
@@ -22,6 +22,6 @@ public interface LessonsDao {
      * @throws java.lang.IllegalArgumentException if id is invalid
      * @return alternativeMaterial for related theme
      */
-    int getAlternativeLesson(int id);
-    int getLessonWithComplexity(Double complexity);
+    public int getAlternativeLesson(int id);
+    public List<Integer> getAvailableLessons (List<Integer> learnedLessons);
 }

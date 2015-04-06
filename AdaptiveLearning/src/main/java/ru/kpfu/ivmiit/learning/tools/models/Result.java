@@ -12,6 +12,9 @@ public class Result {
     private String Res;
     private int studentId;
     private int lessonId;
+    private double absComplexity;
+    private double relComplexity;
+    private double totalComplexity;
     public int getStudentId (){return studentId;}
     public int getLessonId () {return  lessonId;}
 
@@ -35,8 +38,25 @@ public class Result {
         return resultsDictionary;
     }
     public Result(String res,int studentId,int lessonId) {
+        boolean isCorrect;
+        double complexity=0;
         this.Res = res;
         this.studentId = studentId;
         this.lessonId = lessonId;
+        Map<Integer, List<String>> r = this.getResults();
+        for (Map.Entry<Integer, List<String>> questionID : r.entrySet()) {
+            isCorrect = Boolean.parseBoolean(questionID.getValue().get(0));
+            complexity = Double.parseDouble(questionID.getValue().get(1));
+            totalComplexity += complexity;
+            if (isCorrect)
+                absComplexity += complexity;
+        }
+        relComplexity = absComplexity/totalComplexity;
+    }
+    public double getAbsComplexity() {
+        return absComplexity;
+    }
+    public double getRelComplexity () {
+        return relComplexity;
     }
 }

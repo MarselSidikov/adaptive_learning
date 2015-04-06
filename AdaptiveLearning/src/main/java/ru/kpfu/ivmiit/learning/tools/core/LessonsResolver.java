@@ -31,8 +31,8 @@ public interface LessonsResolver {
 
     /**
      *
-     * @param results results tests
+     * @param studentID
      * @return next lesson that best fit for user
      */
-    int getNewLesson(List<Result> results);
+    int getNewLessonForStudent(int studentID, List<Integer> learnedLessons);
 }
