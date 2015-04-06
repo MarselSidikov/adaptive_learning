@@ -1,24 +1,57 @@
 package ru.kpfu.ivmiit.learning.tools.dao;
 
+
 import ru.kpfu.ivmiit.learning.tools.models.LoginData;
 import ru.kpfu.ivmiit.learning.tools.models.TestResult;
 import ru.kpfu.ivmiit.learning.tools.models.User;
 
-import org.springframework.jdbc.core.simple.SimpleJdbcDaoSupport;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
 import org.springframework.jdbc.core.RowMapper;
-import java.security.SecureRandom;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * @author Sidikov Marsel, Lebedenko Igor, Karpov Oleg (Kazan Federal University)
  *
  */
-public class HsqlUsersDao extends SimpleJdbcDaoSupport implements UsersDao {
+public class HsqlUsersDao extends NamedParameterJdbcDaoSupport implements UsersDao {
+
+    private static final String HSQL_GET_STUDENTS_COUNT_BY_LOGPAS = "SELECT COUNT(*) FROM Students WHERE " +
+            "(login = :login AND passHash = :password)";
+
+    private static final String HSQL_UPDATE_STUDENT_BY_LOGPAS = "UPDATE Students SET userToken = :userToken WHERE " +
+            "(login = :login AND passHash = :password)";
+
+    private static final String HSQL_STUDENTS_COUNT_BY_LOGIN = "SELECT COUNT(*) FROM Students WHERE " +
+            "login = :login";
+
+    private static final String HSQL_STUDENTS_COUNT_BY_USERTOKEN = "SELECT COUNT(*) FROM Students WHERE " +
+            "userToken = :userToken";
+
+    private static final String HSQL_GET_STUDENT_BY_USERTOKEN = "SELECT (*) FROM Students WHERE " +
+            "userToken = :userToken";
+
+    private static final String HSQL_UPDATE_STUDENT_BY_USERTOKEN = "UPDATE Students SET userToken = " +
+            ":newUserToken WHERE userToken = :userToken";
+
+    private static final String HSQL_LESSONS_COUNT_BY_ID = "SELECT COUNT(*) FROM Lessons WHERE id = " +
+            ":alternativeMaterialId";
+
+    private static final String HSQL_CURRENT_URLS_BY_USERTOKEN = "SELECT currentURLs FROM Students WHERE " +
+            "userToken = :userToken";
+
+    private static final String HSQL_CURRENT_LESSON_BY_USERTOKEN = "SELECT currentLesson FROM Students WHERE " +
+            "userToken = :userToken";
+
+    private static final String HSQL_UPDATE_CURRENT_URLS = "UPDATE Students SET currentURLs = :URLs WHERE " +
+            "userToken = :userToken";
+
+    private static final String HSQL_UPDATE_CURRENT_LESSON = "UPDATE Students SET currentLesson = :lessonID " +
+            "WHERE userToken = :userToken";
+
 
     private RowMapper<LoginData> loginDataRowMapper = new RowMapper<LoginData>() {
         @Override
@@ -49,22 +82,13 @@ public class HsqlUsersDao extends SimpleJdbcDaoSupport implements UsersDao {
         paramMap.put("login", data.getLogin());
         paramMap.put("password", data.getPassword());
 
-        String sql = "SELECT COUNT(*) FROM Students WHERE (login = :login AND passHash = :password)";
-        int count = getSimpleJdbcTemplate().queryForInt(sql, paramMap);
+        int count = getNamedParameterJdbcTemplate().queryForObject(HSQL_GET_STUDENTS_COUNT_BY_LOGPAS,
+                paramMap, Integer.class);
 
         if (count == 1) {
-            String AB = "0123456789abcdefghigklmnopqrstuvwxyz";
-            SecureRandom rnd = new SecureRandom();
-
-            StringBuilder sb = new StringBuilder(32);
-            for (int i = 0; i < 32; i++) {
-                sb.append(AB.charAt(rnd.nextInt(AB.length())));
-            }
-            String userToken = sb.toString();
-
+            String userToken = UsersDaoUtil.generateUserToken();
             paramMap.put("userToken", userToken);
-            sql = "UPDATE Students SET userToken = :userToken WHERE (login = :login AND passHash = :password)";
-            getSimpleJdbcTemplate().update(sql, paramMap);
+            getNamedParameterJdbcTemplate().update(HSQL_UPDATE_STUDENT_BY_LOGPAS, paramMap);
 
             return userToken;
         }
@@ -79,8 +103,11 @@ public class HsqlUsersDao extends SimpleJdbcDaoSupport implements UsersDao {
             throw new IllegalArgumentException();
         }
 
-        String sql = "SELECT COUNT(*) FROM Students WHERE login = :login";
-        int count = getSimpleJdbcTemplate().queryForInt(sql, login);
+        Map<String, String> paramMap = new HashMap<String, String>();
+        paramMap.put("login", login);
+
+        int count = getNamedParameterJdbcTemplate().queryForObject(HSQL_STUDENTS_COUNT_BY_LOGIN,
+                paramMap, Integer.class);
 
         return count == 0;
     }
@@ -94,13 +121,12 @@ public class HsqlUsersDao extends SimpleJdbcDaoSupport implements UsersDao {
         Map<String, String> paramMap = new HashMap<String, String>();
         paramMap.put("userToken", userToken);
 
-        String sql = "SELECT COUNT(*) FROM Students WHERE userToken = :userToken";
-        int count = getSimpleJdbcTemplate().queryForInt(sql, paramMap);
+        int count = getNamedParameterJdbcTemplate().queryForObject(HSQL_STUDENTS_COUNT_BY_USERTOKEN,
+                paramMap, Integer.class);
 
         if (count == 1) {
             paramMap.put("newUserToken", "");
-            sql = "UPDATE Students SET userToken = :newUserToken WHERE userToken = :userToken";
-            getSimpleJdbcTemplate().update(sql, paramMap);
+            getNamedParameterJdbcTemplate().update(HSQL_UPDATE_STUDENT_BY_USERTOKEN, paramMap);
         }
         else {
             throw new IllegalArgumentException();
@@ -114,9 +140,12 @@ public class HsqlUsersDao extends SimpleJdbcDaoSupport implements UsersDao {
 
     @Override
     public User getProfile(String userToken) {
+        Map<String, String> paramMap = new HashMap<String, String>();
+        paramMap.put("userToken", userToken);
+
         User user;
-        String sql = "SELECT (*) FROM Students WHERE userToken = :userToken";
-        user = getSimpleJdbcTemplate().queryForObject(sql, userRowMapper, userToken);
+        user = getNamedParameterJdbcTemplate().queryForObject(HSQL_GET_STUDENT_BY_USERTOKEN,
+                paramMap, userRowMapper);
 
         if (user != null) {
             return user;
@@ -138,19 +167,18 @@ public class HsqlUsersDao extends SimpleJdbcDaoSupport implements UsersDao {
         }
 
         Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("alternativeMaterialId", alternativeMaterialId);
+        paramMap.put("lessonID", alternativeMaterialId);
 
-        String sql = "SELECT COUNT(*) FROM Lessons WHERE id = :alternativeMaterialId";
-        int count = getSimpleJdbcTemplate().queryForInt(sql, paramMap);
+        int count = getNamedParameterJdbcTemplate().queryForObject(HSQL_LESSONS_COUNT_BY_ID,
+                paramMap, Integer.class);
 
         if (count == 1) {
-            sql = "SELECT COUNT(*) FROM Students WHERE userToken = :userToken";
-            count = getSimpleJdbcTemplate().queryForInt(sql, paramMap);
+            paramMap.put("userToken", userToken);
+            count = getNamedParameterJdbcTemplate().queryForObject(HSQL_STUDENTS_COUNT_BY_USERTOKEN,
+                    paramMap, Integer.class);
 
             if (count == 1) {
-                paramMap.put("userToken", userToken);
-                sql = "UPDATE Students SET currentLesson = :alternativeMaterialId WHERE userToken = :userToken";
-                getSimpleJdbcTemplate().update(sql, paramMap);
+                getNamedParameterJdbcTemplate().update(HSQL_UPDATE_CURRENT_LESSON, paramMap);
             }
             else {
                 throw new IllegalArgumentException();
@@ -173,8 +201,11 @@ public class HsqlUsersDao extends SimpleJdbcDaoSupport implements UsersDao {
 
     @Override
     public String getCurrentURLs(String userToken) {
-        String sql = "SELECT currentURLs FROM Students WHERE userToken = :userToken";
-        String current = getSimpleJdbcTemplate().queryForObject(sql, String.class, userToken);
+        Map<String, String> paramMap = new HashMap<String, String>();
+        paramMap.put("userToken", userToken);
+
+        String current = getNamedParameterJdbcTemplate().queryForObject(HSQL_CURRENT_URLS_BY_USERTOKEN,
+                paramMap, String.class);
 
         if (current != null) {
             return current;
@@ -184,16 +215,24 @@ public class HsqlUsersDao extends SimpleJdbcDaoSupport implements UsersDao {
         }
     }
 
-
     @Override
     public int getCurrentLessonID(String userToken) {
-        String sql = "SELECT (*) FROM Students WHERE userToken = :userToken";
-        int count = getSimpleJdbcTemplate().queryForInt(sql, userToken);
+        Map<String, String> paramMap = new HashMap<String, String>();
+        paramMap.put("userToken", userToken);
+
+        int count = getNamedParameterJdbcTemplate().queryForObject(HSQL_STUDENTS_COUNT_BY_USERTOKEN,
+                paramMap, Integer.class);
 
         if (count == 1) {
-            sql = "SELECT currentLesson FROM Students WHERE userToken = :userToken";
-            return getSimpleJdbcTemplate().queryForInt(sql, userToken);
-                    }
+            Integer currentLessonID = getNamedParameterJdbcTemplate().queryForObject(HSQL_CURRENT_LESSON_BY_USERTOKEN,
+                    paramMap, Integer.class);
+            if (currentLessonID != null) {
+                return currentLessonID;
+            }
+            else {
+                throw new IllegalArgumentException();
+            }
+        }
         else {
             throw new IllegalArgumentException();
         }
@@ -204,13 +243,12 @@ public class HsqlUsersDao extends SimpleJdbcDaoSupport implements UsersDao {
         Map<String, String> paramMap = new HashMap<String, String>();
         paramMap.put("userToken", userToken);
 
-        String sql = "SELECT COUNT(*) FROM Students WHERE userToken = :userToken";
-        int count = getSimpleJdbcTemplate().queryForInt(sql, paramMap);
+        int count = getNamedParameterJdbcTemplate().queryForObject(HSQL_STUDENTS_COUNT_BY_USERTOKEN,
+                paramMap, Integer.class);
 
         if (count == 1) {
             paramMap.put("URLs", URLs);
-            sql = "UPDATE Students SET currentURLs = :URLs WHERE userToken = :userToken";
-            getSimpleJdbcTemplate().update(sql, paramMap);
+            getNamedParameterJdbcTemplate().update(HSQL_UPDATE_CURRENT_URLS, paramMap);
         }
         else {
             throw new IllegalArgumentException();
@@ -222,13 +260,12 @@ public class HsqlUsersDao extends SimpleJdbcDaoSupport implements UsersDao {
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("userToken", userToken);
 
-        String sql = "SELECT COUNT(*) FROM Students WHERE userToken = :userToken";
-        int count = getSimpleJdbcTemplate().queryForInt(sql, paramMap);
+        int count = getNamedParameterJdbcTemplate().queryForObject(HSQL_STUDENTS_COUNT_BY_USERTOKEN,
+                paramMap, Integer.class);
 
         if (count == 1) {
             paramMap.put("lessonID", lessonID);
-            sql = "UPDATE Students SET currentLesson = :lessonID WHERE userToken = :userToken";
-            getSimpleJdbcTemplate().update(sql, paramMap);
+            getNamedParameterJdbcTemplate().update(HSQL_UPDATE_CURRENT_LESSON, paramMap);
         }
         else {
             throw new IllegalArgumentException();
