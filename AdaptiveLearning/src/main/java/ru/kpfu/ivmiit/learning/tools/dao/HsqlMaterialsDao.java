@@ -13,13 +13,29 @@ import java.util.Map;
  */
 public class HsqlMaterialsDao extends NamedParameterJdbcDaoSupport implements MaterialsDao {
 
-    private static final String HSQL_BLOCK_URLS_BY_LESSON_ID = "SELECT blockURLS FROM Lessons WHERE id = :lessonID";
+    private static final String HSQL_BLOCK_URLS_BY_LESSON_ID = "SELECT block_urls FROM Lesson WHERE id = :lessonID";
 
-    private static final String HSQL_MAIN_MAT_URL_BY_LESSON_ID = "SELECT mainMatURL FROM Lessons WHERE id = :lessonID";
+    private static final String HSQL_MAIN_MAT_URL_BY_LESSON_ID = "SELECT main_mat_url FROM Lesson WHERE id = :lessonID";
+
+    private static final String HSQL_EXTRA_MAT_URL_BY_LESSON_ID = "SELECT extra_mat_url FROM Lesson WHERE id = :lessonID";
+
+    private static final String HSQL_NEXT_LESSON_BY_LESSON_ID = "SELECT next_lesson FROM Lesson WHERE id = :lessonID";
+
 
     @Override
     public String getAlternativeMaterial(int id) {
-        return null;
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("lessonID", id);
+
+        String extraMatURL = getNamedParameterJdbcTemplate().queryForObject(HSQL_EXTRA_MAT_URL_BY_LESSON_ID,
+                paramMap, String.class);
+
+        if (extraMatURL != null) {
+            return extraMatURL;
+        }
+        else {
+            throw new IllegalArgumentException();
+        }
     }
 
     @Override
@@ -40,7 +56,18 @@ public class HsqlMaterialsDao extends NamedParameterJdbcDaoSupport implements Ma
 
     @Override
     public int getNextLesson(int lessonID) {
-        return 0;
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("lessonID", lessonID);
+
+        Integer nextLesson = getNamedParameterJdbcTemplate().queryForObject(HSQL_NEXT_LESSON_BY_LESSON_ID,
+                paramMap, Integer.class);
+
+        if (nextLesson != null) {
+            return nextLesson;
+        }
+        else {
+            throw new IllegalArgumentException();
+        }
     }
 
     @Override
