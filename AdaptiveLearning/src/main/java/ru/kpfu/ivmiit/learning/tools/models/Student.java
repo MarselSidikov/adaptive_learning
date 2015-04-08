@@ -1,21 +1,24 @@
 package ru.kpfu.ivmiit.learning.tools.models;
 
+import java.util.List;
+
 /**
  * Created by Ильнар on 30.03.2015.
  */
 public class Student {
     private String first_Name;
-    private String lastName;
-    private int passwHash;
+    private String last_Name;
+    private int passw_hash;
     private String login;
-    private String userToken;
+    private String user_token;
+    private List<String> current_urls;
 
-    public Student(String first_Name, String lastName, int passwHash, String login, String userToken) {
+    public Student(String first_Name, String last_Name, int passw_hash, String login, String user_token) {
         this.first_Name = first_Name;
-        this.lastName = lastName;
-        this.passwHash = passwHash;
+        this.last_Name = last_Name;
+        this.passw_hash = passw_hash;
         this.login = login;
-        this.userToken = userToken;
+        this.user_token = user_token;
     }
 
     public String getFirst_Name() {
@@ -26,20 +29,20 @@ public class Student {
         this.first_Name = first_Name;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getLast_Name() {
+        return last_Name;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setLast_Name(String last_Name) {
+        this.last_Name = last_Name;
     }
 
-    public int getPasswHash() {
-        return passwHash;
+    public int getPassw_hash() {
+        return passw_hash;
     }
 
-    public void setPasswHash(int passwHash) {
-        this.passwHash = passwHash;
+    public void setPassw_hash(int passw_hash) {
+        this.passw_hash = passw_hash;
     }
 
     public String getLogin() {
@@ -50,12 +53,12 @@ public class Student {
         this.login = login;
     }
 
-    public String getUserToken() {
-        return userToken;
+    public String getUser_token() {
+        return user_token;
     }
 
-    public void setUserToken(String userToken) {
-        this.userToken = userToken;
+    public void setUser_token(String user_token) {
+        this.user_token = user_token;
     }
 
 }
