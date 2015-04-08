@@ -6,30 +6,30 @@ import java.util.List;
  * Created by Ильнар on 30.03.2015.
  */
 public class Lesson {
-    private String mainMatURL;
-    private String extraMatURL;
+    private String main_mat_url;
+    private String extra_mat_url;
     private List<String> blockURLs;
-    private int[] blockTestsIDs;
+    private int[] block_tests_ids;
 
-    public Lesson(String mainMatURL, String extraMatURL, List<String> blockURLs, int[] blockTestsIDs) {
-        this.mainMatURL = mainMatURL;
-        this.extraMatURL = extraMatURL;
+    public Lesson(String main_mat_url, String extra_mat_url, List<String> blockURLs, int[] blockTestsIDs) {
+        this.main_mat_url = main_mat_url;
+        this.extra_mat_url = extra_mat_url;
         this.blockURLs = blockURLs;
-        this.blockTestsIDs = blockTestsIDs;
+        this.block_tests_ids = blockTestsIDs;
     }
 
     public Lesson(String mainMatURL, String extraMatURL) {
 
-        this.mainMatURL = mainMatURL;
-        this.extraMatURL = extraMatURL;
+        this.main_mat_url = mainMatURL;
+        this.extra_mat_url = extraMatURL;
     }
 
-    public String getMainMatURL() {
-        return mainMatURL;
+    public String getMain_mat_url() {
+        return main_mat_url;
     }
 
-    public void setMainMatURL(String mainMatURL) {
-        this.mainMatURL = mainMatURL;
+    public void setMain_mat_url(String main_mat_url) {
+        this.main_mat_url = main_mat_url;
     }
 
     public List<String> getBlockURLs() {
@@ -40,19 +40,19 @@ public class Lesson {
         this.blockURLs = blockURLs;
     }
 
-    public String getExtraMatURL() {
-        return extraMatURL;
+    public String getExtra_mat_url() {
+        return extra_mat_url;
     }
 
-    public void setExtraMatURL(String extraMatURL) {
-        this.extraMatURL = extraMatURL;
+    public void setExtra_mat_url(String extra_mat_url) {
+        this.extra_mat_url = extra_mat_url;
     }
 
-    public int[] getBlockTestsIDs() {
-        return blockTestsIDs;
+    public int[] getBlock_tests_ids() {
+        return block_tests_ids;
     }
 
-    public void setBlockTestsIDs(int[] blockTestsIDs) {
-        this.blockTestsIDs = blockTestsIDs;
+    public void setBlock_tests_ids(int[] block_tests_ids) {
+        this.block_tests_ids = block_tests_ids;
     }
 }

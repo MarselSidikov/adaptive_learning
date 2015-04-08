@@ -6,15 +6,15 @@ package ru.kpfu.ivmiit.learning.tools.models;
 public class Question {
     private int id;
     private String question;
-    private int correctAnswerID;
+    private int correct_answer_id;
     private int block;
 
     public int getBlock() {
         return block;
     }
 
-    public int getCorrectAnswerID() {
-        return correctAnswerID;
+    public int getCorrect_answer_id() {
+        return correct_answer_id;
     }
 
     public String getQuestion() {
@@ -37,11 +37,11 @@ public class Question {
         this.id = id;
     }
 
-    public Question(int id, String question, int block, int correctAnswerID) {
+    public Question(int id, String question, int block, int correct_answer_id) {
         this.id = id;
         this.question = question;
         this.block = block;
-        this.correctAnswerID = correctAnswerID;
+        this.correct_answer_id = correct_answer_id;
     }
 
     public Question(String question, int block) {
