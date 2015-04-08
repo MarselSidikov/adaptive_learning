@@ -1,1 +1,0 @@
-CREATE TABLE StudentAnswers (id INT , questionID INT , isCorrect INT ,testResultID INT ,PRIMARY KEY (id), FOREIGN KEY (testResultID) REFERENCES TestResult(id))

@@ -1,1 +1,0 @@
-CREATE TABLE Test (id INT, questionIDs VARCHAR (1000), PRIMARY KEY (id))

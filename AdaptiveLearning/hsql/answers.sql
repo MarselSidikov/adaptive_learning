@@ -1,1 +1,0 @@
-CREATE TABLE Answers (id INT , answer VARCHAR(100), relQuestionsID INT, PRIMARY KEY (id), FOREIGN KEY (relQuestionsID) REFERENCES Questions(id))

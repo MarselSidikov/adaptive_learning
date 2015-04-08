@@ -1,1 +1,0 @@
-CREATE TABLE Questions (id INT , question VARCHAR(100), correctAnswerID INT, block INT, PRIMARY KEY (id))
