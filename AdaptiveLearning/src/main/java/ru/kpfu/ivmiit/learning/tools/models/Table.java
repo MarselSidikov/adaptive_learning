@@ -1,6 +1,8 @@
 package ru.kpfu.ivmiit.learning.tools.models;
 
 
+import breeze.optimize.linear.LinearProgram;
+import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.mllib.recommendation.ALS;
@@ -10,6 +12,8 @@ import org.apache.spark.storage.StorageLevel;
 import ru.kpfu.ivmiit.learning.tools.SCSingletone;
 import org.apache.spark.api.java.function.Function;
 import ru.kpfu.ivmiit.learning.tools.core.RatingsTableInterface;
+import scala.Tuple2;
+
 import java.util.List;
 
 /**
@@ -27,6 +31,8 @@ public class Table implements RatingsTableInterface {
     private int numIterationsForRelTestResult;
     private double alphaForRelTestResult;
     private JavaSparkContext javaSparkContext;
+    JavaPairRDD<Tuple2<Integer, Integer>, Double> absPredictions;
+    JavaPairRDD<Tuple2<Integer, Integer>, Double> relPredictions;
     public Table(String path, int rankForAbsTestResult, int numIterationsForAbsTestResult, int rankForRelTestResult, int numIterationsForRelTestResult, double alphaForAbsTestResult, double alphaForRelTestResult) {
         this.rankForAbsTestResult = rankForAbsTestResult;
         this.rankForRelTestResult = rankForRelTestResult;
@@ -69,6 +75,31 @@ public class Table implements RatingsTableInterface {
     private void recalc() {
         modelAbsTestResult = ALS.train(JavaRDD.toRDD(tableAbsTestResult), rankForAbsTestResult, numIterationsForAbsTestResult, alphaForAbsTestResult);
         modelRelTestResult = ALS.train(JavaRDD.toRDD(tableRelTestResult), rankForRelTestResult, numIterationsForRelTestResult, alphaForRelTestResult);
+        JavaRDD<Tuple2<Object, Object>> userProducts = tableAbsTestResult.map(
+                new Function<Rating, Tuple2<Object, Object>>() {
+                    public Tuple2<Object, Object> call(Rating r) {
+                        return new Tuple2<Object, Object>(r.user(), r.product());
+                    }
+                }
+        );
+        absPredictions = JavaPairRDD.fromJavaRDD(
+        modelAbsTestResult.predict(JavaRDD.toRDD(userProducts)).toJavaRDD().map(
+                new Function<Rating, Tuple2<Tuple2<Integer, Integer>, Double>>() {
+                    public Tuple2<Tuple2<Integer, Integer>, Double> call(Rating r){
+                        return new Tuple2<Tuple2<Integer, Integer>, Double>(
+                                new Tuple2<Integer, Integer>(r.user(), r.product()), r.rating());
+                        }
+                    }
+        ));
+        relPredictions  = JavaPairRDD.fromJavaRDD(
+                modelRelTestResult.predict(JavaRDD.toRDD(userProducts)).toJavaRDD().map(
+                        new Function<Rating, Tuple2<Tuple2<Integer, Integer>, Double>>() {
+                            public Tuple2<Tuple2<Integer, Integer>, Double> call(Rating r){
+                                return new Tuple2<Tuple2<Integer, Integer>, Double>(
+                                        new Tuple2<Integer, Integer>(r.user(), r.product()), r.rating());
+                            }
+                        }
+                ));
 
     }
 
@@ -117,5 +148,20 @@ public class Table implements RatingsTableInterface {
             }
         });
         return studentRelResults.collect();
+    }
+    public List<Tuple2<Tuple2<Integer,Integer>,Double>> getRelPredictedRatingsForStudent (int studentID) {
+        return relPredictions.filter(new Function<Tuple2<Tuple2<Integer, Integer>, Double>, Boolean>() {
+            public Boolean call(Tuple2<Tuple2<Integer, Integer>, Double> tuple2DoubleTuple2) throws Exception {
+                return tuple2DoubleTuple2._1()._1()==studentID;
+            }
+        }).collect();
+    }
+    public List<Tuple2<Tuple2<Integer,Integer>,Double>> getABSPredictedRatingsForStudent (int studentID) {
+        return absPredictions.filter(new Function<Tuple2<Tuple2<Integer, Integer>, Double>, Boolean>() {
+            @Override
+            public Boolean call(Tuple2<Tuple2<Integer, Integer>, Double> tuple2DoubleTuple2) throws Exception {
+                return tuple2DoubleTuple2._1()._1()==studentID;
+            }
+        }).collect();
     }
 }
