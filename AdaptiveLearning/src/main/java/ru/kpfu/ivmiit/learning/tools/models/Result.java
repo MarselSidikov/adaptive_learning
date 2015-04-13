@@ -9,16 +9,45 @@ import java.util.*;
  *
  */
 public class Result {
+    private int id;
     private String Res;
     private int studentId;
     private int lessonId;
     private double absComplexity;
     private double relComplexity;
     private double totalComplexity;
-    public int getStudentId (){return studentId;}
-    public int getLessonId () {return  lessonId;}
 
+    /**
+     *  getters and setters
+     */
+    public int getStudentId (){
+        return studentId;
+    }
 
+    public int getLessonId () {
+        return  lessonId;
+    }
+
+    public int getId () {
+        return  id;
+    }
+
+    public void setId(int id) {
+        this.id =id;
+    }
+
+    public double getAbsComplexity() {
+        return absComplexity;
+    }
+
+    public double getRelComplexity () {
+        return relComplexity;
+    }
+
+    /**
+     *
+     * @return
+     */
     public Map<Integer,List<String>> getResults() {
         Map<Integer,List<String>> resultsDictionary = new HashMap<Integer, List<String>>();
         String [] answersArray = Res.split(";");
@@ -52,11 +81,5 @@ public class Result {
                 absComplexity += complexity;
         }
         relComplexity = absComplexity/totalComplexity;
-    }
-    public double getAbsComplexity() {
-        return absComplexity;
-    }
-    public double getRelComplexity () {
-        return relComplexity;
     }
 }

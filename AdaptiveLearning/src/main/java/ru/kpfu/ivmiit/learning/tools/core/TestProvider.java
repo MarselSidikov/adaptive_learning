@@ -1,6 +1,5 @@
 package ru.kpfu.ivmiit.learning.tools.core;
 
-import ru.kpfu.ivmiit.learning.tools.models.Answers;
 import ru.kpfu.ivmiit.learning.tools.models.Result;
 import ru.kpfu.ivmiit.learning.tools.models.Test;
 

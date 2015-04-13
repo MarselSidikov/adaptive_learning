@@ -11,9 +11,10 @@ name - lesson name
 complexity - lesson total complexity
 alternative_material_ids contains ids of alternative materials separated by ; if exists
 lesson - some reference to the lessons content
+lessons_mlb - lessons ids that must be learned before that lessons
  */
-CREATE TABLE Lessons (id INT ,covered_topics VARCHAR (500),name VARCHAR (30),comlexity DOUBLE , lesson INT,
-  alternative_material_ids INT, PRIMARY KEY (id));
+CREATE TABLE Lessons (id INT ,covered_topics VARCHAR (500),name VARCHAR (30),comlexity DOUBLE , lessons_mlb VARCHAR(500),
+  lesson INT, alternative_material_ids INT, PRIMARY KEY (id));
 
 /*
 Table Questions contains question info
