@@ -1,25 +1,27 @@
 package ru.kpfu.ivmiit.learning.tools.models;
 
 
-import breeze.optimize.linear.LinearProgram;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.mllib.recommendation.ALS;
 import org.apache.spark.mllib.recommendation.MatrixFactorizationModel;
 import org.apache.spark.mllib.recommendation.Rating;
-import org.apache.spark.storage.StorageLevel;
 import ru.kpfu.ivmiit.learning.tools.SCSingletone;
 import org.apache.spark.api.java.function.Function;
 import ru.kpfu.ivmiit.learning.tools.core.RatingsTableInterface;
 import scala.Tuple2;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
  * Created by Зульфат on 24.03.2015.
  */
 public class Table implements RatingsTableInterface {
+    private static Table instance;
     private JavaRDD<Rating> tableAbsTestResult;
     private JavaRDD<Rating> tableRelTestResult;
     private MatrixFactorizationModel modelAbsTestResult;
@@ -33,7 +35,16 @@ public class Table implements RatingsTableInterface {
     private JavaSparkContext javaSparkContext;
     JavaPairRDD<Tuple2<Integer, Integer>, Double> absPredictions;
     JavaPairRDD<Tuple2<Integer, Integer>, Double> relPredictions;
-    public Table(String path, int rankForAbsTestResult, int numIterationsForAbsTestResult, int rankForRelTestResult, int numIterationsForRelTestResult, double alphaForAbsTestResult, double alphaForRelTestResult) {
+    public static synchronized Table getInstance () {
+        if (instance==null) {
+            instance = new Table();
+        }
+        return instance;
+    }
+    private Table () {
+
+    }
+    private Table(String path, int rankForAbsTestResult, int numIterationsForAbsTestResult, int rankForRelTestResult, int numIterationsForRelTestResult, double alphaForAbsTestResult, double alphaForRelTestResult) {
         this.rankForAbsTestResult = rankForAbsTestResult;
         this.rankForRelTestResult = rankForRelTestResult;
         this.numIterationsForAbsTestResult = numIterationsForAbsTestResult;
@@ -54,11 +65,10 @@ public class Table implements RatingsTableInterface {
                 return new Rating(Integer.parseInt(sarr[0]), Integer.parseInt(sarr[1]), Double.parseDouble(sarr[3]));
             }
         });
-        modelAbsTestResult = ALS.train(JavaRDD.toRDD(tableAbsTestResult), rankForAbsTestResult, numIterationsForAbsTestResult, alphaForAbsTestResult);
-        modelRelTestResult = ALS.train(JavaRDD.toRDD(tableRelTestResult), rankForRelTestResult, numIterationsForRelTestResult, alphaForRelTestResult);
+        recalc();
     }
 
-    public Table(JavaRDD<Rating> tableAbsTestResult, JavaRDD<Rating> tableRelTestResult, int rankForAbsTestResult, int numIterationsForAbsTestResult, int rankForRelTestResult, int numIterationsForRelTestResult, double alphaForAbsTestResult, double alphaForRelTestResult) {
+    private Table(JavaRDD<Rating> tableAbsTestResult, JavaRDD<Rating> tableRelTestResult, int rankForAbsTestResult, int numIterationsForAbsTestResult, int rankForRelTestResult, int numIterationsForRelTestResult, double alphaForAbsTestResult, double alphaForRelTestResult) {
         this.rankForAbsTestResult = rankForAbsTestResult;
         this.rankForRelTestResult = rankForRelTestResult;
         this.numIterationsForAbsTestResult = numIterationsForAbsTestResult;
@@ -67,9 +77,7 @@ public class Table implements RatingsTableInterface {
         this.alphaForRelTestResult = alphaForAbsTestResult;
         this.tableAbsTestResult = tableAbsTestResult;
         this.tableRelTestResult = tableRelTestResult;
-        modelAbsTestResult = ALS.train(JavaRDD.toRDD(this.tableAbsTestResult), rankForAbsTestResult, numIterationsForAbsTestResult, alphaForAbsTestResult);
-        modelRelTestResult = ALS.train(JavaRDD.toRDD(tableRelTestResult), rankForRelTestResult, numIterationsForRelTestResult, alphaForRelTestResult);
-
+        recalc();
     }
 
     private void recalc() {
@@ -157,11 +165,18 @@ public class Table implements RatingsTableInterface {
         }).collect();
     }
     public List<Tuple2<Tuple2<Integer,Integer>,Double>> getABSPredictedRatingsForStudent (int studentID) {
-        return absPredictions.filter(new Function<Tuple2<Tuple2<Integer, Integer>, Double>, Boolean>() {
+        List<Tuple2<Tuple2<Integer,Integer>,Double>> retValue = absPredictions.filter(new Function<Tuple2<Tuple2<Integer, Integer>, Double>, Boolean>() {
             @Override
             public Boolean call(Tuple2<Tuple2<Integer, Integer>, Double> tuple2DoubleTuple2) throws Exception {
                 return tuple2DoubleTuple2._1()._1()==studentID;
             }
         }).collect();
+        retValue.sort(new Comparator<Tuple2<Tuple2<Integer, Integer>, Double>>() {
+            @Override
+            public int compare(Tuple2<Tuple2<Integer, Integer>, Double> o1, Tuple2<Tuple2<Integer, Integer>, Double> o2) {
+                return Double.compare(o1._2(),o1._2());
+            }
+        });
+        return retValue;
     }
 }

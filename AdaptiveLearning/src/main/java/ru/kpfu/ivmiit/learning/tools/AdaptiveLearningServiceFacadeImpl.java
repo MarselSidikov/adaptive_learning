@@ -1,6 +1,7 @@
 package ru.kpfu.ivmiit.learning.tools;
 
 import ru.kpfu.ivmiit.learning.tools.core.LessonsResolver;
+import ru.kpfu.ivmiit.learning.tools.core.RatingsTableInterface;
 import ru.kpfu.ivmiit.learning.tools.core.TestProvider;
 import ru.kpfu.ivmiit.learning.tools.dao.StudentsDao;
 import ru.kpfu.ivmiit.learning.tools.models.*;
@@ -19,6 +20,13 @@ public class AdaptiveLearningServiceFacadeImpl implements AdaptiveLearningServic
 
 	private TestProvider testProvider;
 
+    private RatingsTableInterface rti;
+
+
+    @Autowired
+    public void setRti (RatingsTableInterface rti) {
+        this.rti = rti;
+    }
     @Autowired
     public void setStudentsDao(StudentsDao studentsDao) {
         this.studentsDao = studentsDao;
@@ -60,7 +68,7 @@ public class AdaptiveLearningServiceFacadeImpl implements AdaptiveLearningServic
 	}
 
     @Override
-    public Lesson getMaterial(int id, String userToken) {
+    public Lesson getLesson(int id, String userToken) {
         List<Integer> materialIds = studentsDao.getLessons(userToken);
         if (materialIds.contains(id)) {
             return lessonsResolver.getLesson(id);
@@ -85,10 +93,11 @@ public class AdaptiveLearningServiceFacadeImpl implements AdaptiveLearningServic
 	}
 
 	@Override
-	public void answersSubmit(String userToken, Result answers) {
-        Result result = testProvider.getResult(userToken, answers);
-        List<Result> oldUserResults = studentsDao.getAllResults(userToken);
-        int newLesson = lessonsResolver.getNewLesson(oldUserResults);
+	public void answersSubmit(String userToken, Result result) {
+        rti.AddResult(result);
+        int studentID = studentsDao.getProfile(userToken).getId();
+        List<Integer> learnedLessons = studentsDao.getLessons(userToken);
+        int newLesson = lessonsResolver.getNewLessonForStudent(studentID,learnedLessons);
         studentsDao.answersSubmit(userToken, result);
         studentsDao.addNewLesson(userToken, newLesson);
 	}

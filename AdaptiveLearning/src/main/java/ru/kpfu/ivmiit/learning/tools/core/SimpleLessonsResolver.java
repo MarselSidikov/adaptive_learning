@@ -6,12 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ru.kpfu.ivmiit.learning.tools.dao.LessonsDao;
 import ru.kpfu.ivmiit.learning.tools.models.Lesson;
 import ru.kpfu.ivmiit.learning.tools.models.Result;
+import scala.Tuple2;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
- * @author Sidikov Marsel, Igor Lebedenko (Kazan Federal University)
+ * @author Sidikov Marsel, Igor Lebedenko, Zulfat Mifathutdinov (Kazan Federal University)
  *
  */
 public class SimpleLessonsResolver implements LessonsResolver {
@@ -44,29 +46,38 @@ public class SimpleLessonsResolver implements LessonsResolver {
         int lessonID=0;
         //first optimizing by relative test results(mark)
         List<Integer> availableLessons = lessonsDao.getAvailableLessons(learnedLessons);
-        List<Rating> studentRelResults = rti.getRelRatingForStudent(studentID);
-        List<Rating> highMark = new LinkedList<Rating>();
-        List<Rating> middleMark = new LinkedList<Rating>();
-        List<Rating> lowMark = new LinkedList<Rating>();
-        List<Rating> optAbsRatings;
-        for (Rating r:studentRelResults) {
-            if (r.rating()>=0.9) {
+        List<Tuple2<Tuple2<Integer,Integer>,Double>> studentRelResults = rti.getRelPredictedRatingsForStudent(studentID);
+        List<Tuple2<Tuple2<Integer,Integer>,Double>> highMark = new LinkedList<Tuple2<Tuple2<Integer,Integer>,Double>>();
+        List<Tuple2<Tuple2<Integer,Integer>,Double>> middleMark = new LinkedList<Tuple2<Tuple2<Integer,Integer>,Double>>();
+        List<Tuple2<Tuple2<Integer,Integer>,Double>> lowMark = new LinkedList<Tuple2<Tuple2<Integer,Integer>,Double>>();
+        List<Tuple2<Tuple2<Integer,Integer>,Double>> optAbsRatings;
+        for (Tuple2<Tuple2<Integer,Integer>,Double> r:studentRelResults) {
+            if (r._2()>=0.9 && availableLessons.contains(r._1()._2())) {
                 highMark.add(r);
             }
-            if (r.rating()<0.9 && r.rating()>=0.75) {
+            if (r._2()<0.9 && r._2()>=0.75 && availableLessons.contains(r._1()._2())) {
                 middleMark.add(r);
             }
-            if (r.rating()<0.75) {
+            if (r._2()<0.75 && availableLessons.contains(r._1()._2())) {
                 lowMark.add(r);
             }
         }
-        //searching in highMarks
+        //choosing one
         if (highMark.size()!=0) {
             optAbsRatings = highMark;
         } else if (middleMark.size()!=0) {
             optAbsRatings = middleMark;
         } else {
             optAbsRatings = lowMark;
+        }
+        List<Tuple2<Tuple2<Integer,Integer>,Double>> studentAbsResults = rti.getABSPredictedRatingsForStudent(studentID);
+        Iterator<Tuple2<Tuple2<Integer,Integer>,Double>> iter = optAbsRatings.iterator();
+        Tuple2<Tuple2<Integer,Integer>,Double> element;
+        while (lessonID==0 && iter.hasNext()) {
+            element = iter.next();
+            if (optAbsRatings.contains(element)) {
+                lessonID = element._1()._2();
+            }
         }
         return lessonID;
     }

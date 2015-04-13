@@ -54,7 +54,7 @@ public interface AdaptiveLearningServiceFacade {
      * @param userToken
      * @return
      */
-    Lesson getMaterial(int id, String userToken);
+    Lesson getLesson(int id, String userToken);
 
     /**
      *
