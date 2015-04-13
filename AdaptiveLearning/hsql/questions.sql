@@ -1,1 +1,0 @@
-CREATE TABLE Questions (id INT , question_text VARCHAR(100), related_lesson_id INT, correct_answer_id INT,comlexity DOUBLE , PRIMARY KEY (id), FOREIGN KEY (related_lesson_id) REFERENCES Lessons(id))

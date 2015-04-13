@@ -1,1 +1,0 @@
-CREATE  TABLE Topics_Lessons (id INT, topic_id int, lesson_id int, PRIMARY KEY (id))

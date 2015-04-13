@@ -1,1 +1,0 @@
-CREATE TABLE Results (id INT , student_id INT,lesson_id INT ,res VARCHAR (500), PRIMARY KEY (id), FOREIGN KEY (student_id) REFERENCES Students(id),FOREIGN  KEY (lesson_id) REFERENCES Lessons(id))
