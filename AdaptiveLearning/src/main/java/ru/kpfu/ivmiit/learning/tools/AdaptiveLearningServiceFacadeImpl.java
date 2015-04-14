@@ -2,6 +2,7 @@ package ru.kpfu.ivmiit.learning.tools;
 
 import ru.kpfu.ivmiit.learning.tools.core.MaterialsResolver;
 import ru.kpfu.ivmiit.learning.tools.core.TestProvider;
+import ru.kpfu.ivmiit.learning.tools.dao.QuestionsDAO;
 import ru.kpfu.ivmiit.learning.tools.dao.UsersDao;
 import ru.kpfu.ivmiit.learning.tools.models.*;
 
@@ -20,6 +21,12 @@ public class AdaptiveLearningServiceFacadeImpl implements AdaptiveLearningServic
 	private MaterialsResolver materialsResolver;
 
 	private TestProvider testProvider;
+     private QuestionsDAO questionsDAO;
+
+    @Autowired
+    public void setQuestionsDAO (QuestionsDAO questionsDAO) {
+        this.questionsDAO = questionsDAO;
+    }
 
     @Autowired
     public void setUsersDao(UsersDao usersDao) {
@@ -92,6 +99,7 @@ public class AdaptiveLearningServiceFacadeImpl implements AdaptiveLearningServic
 
 	@Override
 	public void answersSubmit(String userToken, TestResult results) {
+        questionsDAO.checkIsCorrect(results);
         String currentURLs = materialsResolver.getNewMaterial(results);
         usersDao.answersSubmit(userToken,results);
         usersDao.setCurrentURLs(userToken,currentURLs);
