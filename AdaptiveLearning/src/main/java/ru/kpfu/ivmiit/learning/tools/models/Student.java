@@ -3,46 +3,63 @@ package ru.kpfu.ivmiit.learning.tools.models;
 import java.util.List;
 
 /**
- * Created by Ильнар on 30.03.2015.
+ * Created by пїЅпїЅпїЅпїЅпїЅпїЅ on 30.03.2015.
  */
 public class Student {
-    private String first_Name;
-    private String last_Name;
-    private int passw_hash;
+    private String firstName;
+    private String lastName;
+    private int passwHash;
     private String login;
-    private String user_token;
-    private List<String> current_urls;
+    private String userToken;
+    private List<Integer> currentLesson;
+    private List<String> currentUrls;
 
-    public Student(String first_Name, String last_Name, int passw_hash, String login, String user_token) {
-        this.first_Name = first_Name;
-        this.last_Name = last_Name;
-        this.passw_hash = passw_hash;
+    public List<Integer> getCurrentLesson() {
+        return currentLesson;
+    }
+
+    public void setCurrentLesson(List<Integer> currentLesson) {
+        this.currentLesson = currentLesson;
+    }
+
+    public List<String> getCurrentUrls() {
+        return currentUrls;
+    }
+
+    public void setCurrentUrls(List<String> currentUrls) {
+        this.currentUrls = currentUrls;
+    }
+
+    public Student(String firstName, String lastName, int passwHash, String login, String userToken) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.passwHash = passwHash;
         this.login = login;
-        this.user_token = user_token;
+        this.userToken = userToken;
     }
 
-    public String getFirst_Name() {
-        return first_Name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirst_Name(String first_Name) {
-        this.first_Name = first_Name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLast_Name() {
-        return last_Name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLast_Name(String last_Name) {
-        this.last_Name = last_Name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public int getPassw_hash() {
-        return passw_hash;
+    public int getPasswHash() {
+        return passwHash;
     }
 
-    public void setPassw_hash(int passw_hash) {
-        this.passw_hash = passw_hash;
+    public void setPasswHash(int passwHash) {
+        this.passwHash = passwHash;
     }
 
     public String getLogin() {
@@ -53,12 +70,12 @@ public class Student {
         this.login = login;
     }
 
-    public String getUser_token() {
-        return user_token;
+    public String getUserToken() {
+        return userToken;
     }
 
-    public void setUser_token(String user_token) {
-        this.user_token = user_token;
+    public void setUserToken(String userToken) {
+        this.userToken = userToken;
     }
 
 }

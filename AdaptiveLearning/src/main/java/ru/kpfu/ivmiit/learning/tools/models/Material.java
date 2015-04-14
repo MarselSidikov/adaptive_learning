@@ -6,16 +6,20 @@ import java.util.List;
  * @author Ilnar Ramazanov (Kazan Federal University)
  */
 public class Material {
+
+    private List<String> url;
+
     public List<String> getUrl() {
+
         return url;
     }
 
-    public Material(List<String> url) {
+    public void setMaterial(List<String> url){
         this.url = url;
     }
 
-    private List<String> url;
-  public void setMaterial(List<String> textOfMaterial){
-    this.url = url;
-  }
+    public Material(List<String> url) {
+
+        this.url = url;
+    }
 }

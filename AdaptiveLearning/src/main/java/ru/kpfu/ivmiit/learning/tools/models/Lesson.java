@@ -3,33 +3,60 @@ package ru.kpfu.ivmiit.learning.tools.models;
 import java.util.List;
 
 /**
- * Created by Ильнар on 30.03.2015.
+ * Created by пїЅпїЅпїЅпїЅпїЅпїЅ on 30.03.2015.
  */
 public class Lesson {
-    private String main_mat_url;
-    private String extra_mat_url;
+    private int id;
+    private String mainMatUrl;
+    private String extraMatUrl;
     private List<String> blockURLs;
-    private int[] block_tests_ids;
+    private List<Integer> blockTestsIds;
+    private List<Integer> mainTestIds;
+    private int nextLesson;
 
-    public Lesson(String main_mat_url, String extra_mat_url, List<String> blockURLs, int[] blockTestsIDs) {
-        this.main_mat_url = main_mat_url;
-        this.extra_mat_url = extra_mat_url;
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public List<Integer> getMainTestIds() {
+        return mainTestIds;
+    }
+
+    public void setMainTestIds(List<Integer> mainTestIds) {
+        this.mainTestIds = mainTestIds;
+    }
+
+    public int getNextLesson() {
+        return nextLesson;
+    }
+
+    public void setNextLesson(int nextLesson) {
+        this.nextLesson = nextLesson;
+    }
+
+    public Lesson(String mainMatUrl, String extraMatUrl, List<String> blockURLs, List<Integer> blockTestsIDs) {
+        this.mainMatUrl = mainMatUrl;
+        this.extraMatUrl = extraMatUrl;
         this.blockURLs = blockURLs;
-        this.block_tests_ids = blockTestsIDs;
+        this.blockTestsIds = blockTestsIDs;
     }
 
     public Lesson(String mainMatURL, String extraMatURL) {
 
-        this.main_mat_url = mainMatURL;
-        this.extra_mat_url = extraMatURL;
+        this.mainMatUrl = mainMatURL;
+        this.extraMatUrl = extraMatURL;
     }
 
-    public String getMain_mat_url() {
-        return main_mat_url;
+    public String getMainMatUrl() {
+        return mainMatUrl;
     }
 
-    public void setMain_mat_url(String main_mat_url) {
-        this.main_mat_url = main_mat_url;
+    public void setMainMatUrl(String mainMatUrl) {
+        this.mainMatUrl = mainMatUrl;
     }
 
     public List<String> getBlockURLs() {
@@ -40,19 +67,19 @@ public class Lesson {
         this.blockURLs = blockURLs;
     }
 
-    public String getExtra_mat_url() {
-        return extra_mat_url;
+    public String getExtraMatUrl() {
+        return extraMatUrl;
     }
 
-    public void setExtra_mat_url(String extra_mat_url) {
-        this.extra_mat_url = extra_mat_url;
+    public void setExtraMatUrl(String extraMatUrl) {
+        this.extraMatUrl = extraMatUrl;
     }
 
-    public int[] getBlock_tests_ids() {
-        return block_tests_ids;
+    public List<Integer> getBlockTestsIds() {
+        return blockTestsIds;
     }
 
-    public void setBlock_tests_ids(int[] block_tests_ids) {
-        this.block_tests_ids = block_tests_ids;
+    public void setBlockTestsIds(List<Integer> blockTestsIds) {
+        this.blockTestsIds = blockTestsIds;
     }
 }

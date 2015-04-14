@@ -1,10 +1,41 @@
 package ru.kpfu.ivmiit.learning.tools.models;
 
 /**
- * Created by Ильнар on 30.03.2015.
+ * Created by пїЅпїЅпїЅпїЅпїЅпїЅ on 30.03.2015.
  */
 public class StudentAnswers {
-    boolean isCorrect;
+    private int id;
+    private int questionID;
+    private int testResultID;
+    private boolean isCorrect;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getQuestionID() {
+        return questionID;
+    }
+
+    public void setQuestionID(int questionID) {
+        this.questionID = questionID;
+    }
+
+    public int getTestResultID() {
+        return testResultID;
+    }
+
+    public void setTestResultID(int testResultID) {
+        this.testResultID = testResultID;
+    }
+
+    public void setCorrect(boolean isCorrect) {
+        this.isCorrect = isCorrect;
+    }
 
     public StudentAnswers(boolean isCorrect) {
         this.isCorrect = isCorrect;
