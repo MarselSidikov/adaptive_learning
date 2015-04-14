@@ -8,7 +8,6 @@ import java.util.*;
 public class TestResult {
     private int lessonID;
     private int studentID;
-    private int block;
     private int mark;
     private List<StudentAnswers> answers;
 
@@ -36,14 +35,6 @@ public class TestResult {
         this.answers = answers;
     }
 
-    public int getBlock() {
-        return block;
-    }
-
-    public void setBlock(int block) {
-        this.block = block;
-    }
-
     public int getMark() {
         return mark;
     }
@@ -54,7 +45,6 @@ public class TestResult {
 
     public TestResult(int block, int mark) {
 
-        this.block = block;
         this.mark = mark;
     }
 }

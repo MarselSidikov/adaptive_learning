@@ -124,4 +124,6 @@ public interface UsersDao {
      * @return void
      */
     public void setLessonID (String userToken, int lessonID);
+
+    public void setLessonID (int id, int lessonID);
 }

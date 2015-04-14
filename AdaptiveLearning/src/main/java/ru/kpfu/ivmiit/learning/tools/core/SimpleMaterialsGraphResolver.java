@@ -6,6 +6,8 @@ import ru.kpfu.ivmiit.learning.tools.dao.UsersDao;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
+
+import ru.kpfu.ivmiit.learning.tools.models.StudentAnswers;
 import ru.kpfu.ivmiit.learning.tools.models.TestResult;
 /**
  * @author Zulfat Miftakhutdinov, Igor Lebedenko (Kazan Federal University)
@@ -42,21 +44,21 @@ public class SimpleMaterialsGraphResolver implements MaterialsResolver {
     public String getNewMaterial(TestResult result) {
         String URLs = new String();
         int lessonID = result.getLessonID();
-        String userToken = result.getUserToken();
+        int studentID = result.getStudentID();
         String blockURLs = materialsDao.getBlockURLs(lessonID);
         String[] blockURLsList = blockURLs.split(";");
         int questionBlock;
-        Map<Integer,Boolean> resultDictionary = result.getResult();
-        for (Integer questionId:resultDictionary.keySet()) {
-            if (!resultDictionary.get(questionId)) {
-                questionBlock = questionsDAO.getQuestionWithID(questionId).getBlock();
+        List<StudentAnswers> answers = result.getAnswers();
+        for (StudentAnswers answ:answers) {
+            if (!answ.isCorrect()) {
+                questionBlock = answ.getBlock();
                 URLs = URLs + blockURLsList[questionBlock] + ';';
             }
         }
         if (URLs!=null)
             return URLs;
         int nextLesson = materialsDao.getNextLesson(lessonID);
-        usersDao.setLessonID(userToken,nextLesson);
+        usersDao.setLessonID(studentID,nextLesson);
         return materialsDao.getMainURL(nextLesson);
     }
 

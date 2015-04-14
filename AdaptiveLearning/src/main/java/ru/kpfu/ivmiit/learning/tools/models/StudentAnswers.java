@@ -8,6 +8,24 @@ public class StudentAnswers {
     private int questionID;
     private int testResultID;
     private boolean isCorrect;
+    private int answerID;
+    private int block;
+
+    public int getBlock() {
+        return block;
+    }
+
+    public void setBlock(int block) {
+        this.block = block;
+    }
+
+    public int getAnswerID() {
+        return answerID;
+    }
+
+    public void setAnswerID(int answerID) {
+        this.answerID = answerID;
+    }
 
     public int getId() {
         return id;
