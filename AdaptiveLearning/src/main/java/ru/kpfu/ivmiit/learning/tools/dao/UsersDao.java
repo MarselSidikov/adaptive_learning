@@ -1,9 +1,9 @@
 package ru.kpfu.ivmiit.learning.tools.dao;
+
 import ru.kpfu.ivmiit.learning.tools.models.LoginData;
 import ru.kpfu.ivmiit.learning.tools.models.TestResult;
-import ru.kpfu.ivmiit.learning.tools.models.User;
+import ru.kpfu.ivmiit.learning.tools.models.Student;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -26,7 +26,7 @@ public interface UsersDao {
      * @return true, if login id not exist, false - otherwise
      * @throws java.lang.IllegalArgumentException when login is null
      */
-    boolean checkLogin (String login);
+    boolean checkLogin(String login);
 
     /**
      *
@@ -38,11 +38,11 @@ public interface UsersDao {
 
     /**
      *
-     * @param user
+     * @param student
      * @return token of user
      * @throws java.lang.IllegalArgumentException if some of user-data is not valid
      */
-    String signUp(User user);
+    String signUp(Student student);
 
     /**
      *
@@ -50,7 +50,7 @@ public interface UsersDao {
      * @return information of user with userToken
      * @throws java.lang.IllegalArgumentException if user with this token is not exist
      */
-    User getProfile(String userToken);
+    Student getProfile(String userToken);
 
     /**
      * @param userToken

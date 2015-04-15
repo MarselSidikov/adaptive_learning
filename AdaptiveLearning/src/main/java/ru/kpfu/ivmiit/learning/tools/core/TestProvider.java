@@ -1,6 +1,6 @@
 package ru.kpfu.ivmiit.learning.tools.core;
 
-import ru.kpfu.ivmiit.learning.tools.models.Answers;
+import ru.kpfu.ivmiit.learning.tools.models.Answer;
 import ru.kpfu.ivmiit.learning.tools.models.Test;
 
 import java.util.List;
@@ -27,5 +27,5 @@ public interface TestProvider {
      * @throws java.lang.IllegalArgumentException if userToken or answers are invalid
      * @return estimate of the test
      */
-    int getResult(String userToken,Answers answers);
+    int getResult(String userToken,Answer answers);
 }

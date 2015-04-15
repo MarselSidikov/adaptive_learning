@@ -1,13 +1,13 @@
 package ru.kpfu.ivmiit.learning.tools.dao;
 
-import ru.kpfu.ivmiit.learning.tools.models.LoginData;
-import ru.kpfu.ivmiit.learning.tools.models.TestResult;
-import ru.kpfu.ivmiit.learning.tools.models.User;
-
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import ru.kpfu.ivmiit.learning.tools.models.LoginData;
+import ru.kpfu.ivmiit.learning.tools.models.Student;
+import ru.kpfu.ivmiit.learning.tools.models.TestResult;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -18,76 +18,80 @@ import java.util.*;
  */
 public class HsqlUsersDao extends NamedParameterJdbcDaoSupport implements UsersDao {
 
-    private static final String HSQL_STUDENT_PASSWHASH_BY_LOGIN = "SELECT passw_hash FROM Student WHERE " +
+    private static final String HSQL_STUDENT_PASSWHASH_BY_LOGIN = "SELECT pass_hash FROM Students WHERE " +
             "login = :login";
 
-    private static final String HSQL_UPDATE_STUDENT_BY_LOGPAS = "UPDATE Student SET user_token = :userToken WHERE " +
-            "(login = :login AND passw_hash = :password)";
+    private static final String HSQL_UPDATE_STUDENT_BY_LOGPAS = "UPDATE Students SET userToken = :userToken WHERE " +
+            "(login = :login AND pass_hash = :password)";
 
-    private static final String HSQL_STUDENTS_COUNT_BY_LOGIN = "SELECT COUNT(*) FROM Student WHERE " +
+    private static final String HSQL_STUDENTS_COUNT_BY_LOGIN = "SELECT COUNT(*) FROM Students WHERE " +
             "login = :login";
 
-    private static final String HSQL_STUDENTS_COUNT_BY_USERTOKEN = "SELECT COUNT(*) FROM Student WHERE " +
-            "user_token = :userToken";
+    private static final String HSQL_STUDENTS_COUNT_BY_USERTOKEN = "SELECT COUNT(*) FROM Students WHERE " +
+            "userToken = :userToken";
 
-    private static final String HSQL_GET_STUDENT_BY_USERTOKEN = "SELECT (*) FROM Student WHERE " +
-            "user_token = :userToken";
+    private static final String HSQL_GET_STUDENT_BY_USERTOKEN = "SELECT (*) FROM Students WHERE " +
+            "userToken = :userToken";
 
-    private static final String HSQL_UPDATE_STUDENT_BY_USERTOKEN = "UPDATE Student SET user_token = " +
-            ":newUserToken WHERE user_token = :userToken";
+    private static final String HSQL_UPDATE_STUDENT_BY_USERTOKEN = "UPDATE Students SET userToken = " +
+            ":newUserToken WHERE userToken = :userToken";
 
-    private static final String HSQL_CURRENT_URLS_BY_USERTOKEN = "SELECT current_urls FROM Student WHERE " +
-            "user_token = :userToken";
+    private static final String HSQL_CURRENT_URLS_BY_USERTOKEN = "SELECT current_urls FROM Students WHERE " +
+            "userToken = :userToken";
 
-    private static final String HSQL_CURRENT_LESSON_BY_USERTOKEN = "SELECT current_lesson FROM Student WHERE " +
-            "user_token = :userToken";
+    private static final String HSQL_CURRENT_LESSON_BY_USERTOKEN = "SELECT current_lesson FROM Students WHERE " +
+            "userToken = :userToken";
 
-    private static final String HSQL_UPDATE_CURRENT_URLS = "UPDATE Student SET current_urls = :URLs WHERE " +
-            "user_token = :userToken";
+    private static final String HSQL_UPDATE_CURRENT_URLS = "UPDATE Students SET current_urls = :URLs WHERE " +
+            "userToken = :userToken";
 
-    private static final String HSQL_UPDATE_CURRENT_LESSON = "UPDATE Student SET current_lesson = :lessonID " +
-            "WHERE user_token = :userToken";
+    private static final String HSQL_UPDATE_CURRENT_LESSON = "UPDATE Students SET current_lesson = :lessonID " +
+            "WHERE userToken = :userToken";
 
-    private static final String HSQL_UPDATE_CURRENT_LESSON_AND_URLS = "UPDATE Student SET current_lesson = " +
-            ":lessonID, current_urls = :currentURLs WHERE user_token = :userToken";
+    private static final String HSQL_UPDATE_CURRENT_LESSON_AND_URLS = "UPDATE Students SET current_lesson = " +
+            ":lessonID, current_urls = :currentURLs WHERE userToken = :userToken";
 
-    private static final String HSQL_STUDENT_ID_BY_USERTOKEN = "SELECT id FROM Student WHERE " +
-            "user_token = :userToken";
+    private static final String HSQL_UPDATE_CURRENT_LESSON_BY_ID = "UPDATE Students SET current_lesson = " +
+            ":lessonID WHERE id = :id";
+
+    private static final String HSQL_STUDENT_ID_BY_USERTOKEN = "SELECT id FROM Students WHERE " +
+            "userToken = :userToken";
 
     private static final String HSQL_INSERT_TEST_RESULT = "INSERT INTO TestResult VALUES (:lessonID, :studentID, " +
-            ":block , :mark)";
+            ":mark)";
 
     private static final String HSQL_GET_MARKS_BY_STUDENT_ID = "SELECT mark FROM TestResult WHERE " +
             "student_id = :studentID";
 
-    private static final String HSQL_INSERT_STUDENT = "INSERT INTO Student VALUES (:firstName, :lastName, " +
-            ":passwHash , :login, :userToken, :currentLesson, :currentURLs)";
+    private static final String HSQL_INSERT_STUDENT = "INSERT INTO Students VALUES (:firstName, :lastName, " +
+            ":login, :passwHash , :currentLesson, :userToken, :currentURLs)";
 
-    private static final String HSQL_FIRST_LESSON_ID = "SELECT MIN(id) FROM Lesson";
-
-    private static final String HSQL_MAIN_MAT_URL_BY_LESSON_ID = "SELECT main_mat_url FROM Lesson WHERE " +
+    private static final String HSQL_MAIN_MAT_URL_BY_LESSON_ID = "SELECT mainMatUrl FROM Lessons WHERE " +
             "id = :currentLesson";
 
 
-    private RowMapper<LoginData> loginDataRowMapper = new RowMapper<LoginData>() {
+    private RowMapper<Student> studentRowMapper = new RowMapper<Student>() {
         @Override
-        public LoginData mapRow(ResultSet resultSet, int i) throws SQLException {
-            LoginData loginData = new LoginData();
-            loginData.setLogin(resultSet.getString("login"));
-            loginData.setPassword(resultSet.getString("passw_hash"));
-            return loginData;
-        }
-    };
+        public Student mapRow(ResultSet resultSet, int i) throws SQLException {
 
-    private RowMapper<User> userRowMapper = new RowMapper<User>() {
-        @Override
-        public User mapRow(ResultSet resultSet, int i) throws SQLException {
-            User user = new User();
-            user.setName(resultSet.getString("first_name"));
-            user.setLastName(resultSet.getString("last_name"));
-            user.setUserLogin(loginDataRowMapper.mapRow(resultSet, i).getLogin(),
-                            loginDataRowMapper.mapRow(resultSet, i).getPassword());
-            return user;
+            String firstName = resultSet.getString("first_name");
+            String lastName = resultSet.getString("last_name");
+            String login = resultSet.getString("login");
+            String passwHash = resultSet.getString("pass_hash");
+            String userToken = resultSet.getString("userToken");
+
+            Student student = new Student(firstName, lastName, passwHash, login, userToken);
+
+            List<Integer> currentLessonList = new ArrayList<Integer>();
+            currentLessonList.add(resultSet.getInt("current_lesson"));
+            student.setCurrentLesson(currentLessonList);
+
+            String[] currentUrlsArray = resultSet.getString("current_urls").split(":");
+            List<String> currentUrlsList = new ArrayList<String>();
+            Collections.addAll(currentUrlsList, currentUrlsArray);
+            student.setCurrentUrls(currentUrlsList);
+
+            return student;
         }
     };
 
@@ -160,37 +164,27 @@ public class HsqlUsersDao extends NamedParameterJdbcDaoSupport implements UsersD
     }
 
     @Override
-    public String signUp(User user) {
-        if (user == null || !checkLogin(user.getLoginData().getLogin())) {
+    public String signUp(Student student) {
+        if (student == null || !checkLogin(student.getLogin())) {
             throw new IllegalArgumentException();
         }
         Map<String, Object> paramMap = new HashMap<String, Object>();
 
-        String passwHash = PasswordHash.createHash(user.getLoginData().getPassword());
+        String passwHash = PasswordHash.createHash(student.getPasswHash());
         String userToken = UsersDaoUtil.generateUserToken();
-        Integer currentLesson = getNamedParameterJdbcTemplate().queryForObject(HSQL_FIRST_LESSON_ID,
-                paramMap, Integer.class);
 
-        if (currentLesson != null) {
-            paramMap.put("currentLesson", currentLesson);
-            String currentURLs = getNamedParameterJdbcTemplate().queryForObject(HSQL_MAIN_MAT_URL_BY_LESSON_ID,
-                    paramMap, String.class);
+        if (student.getCurrentLesson() != null && student.getCurrentUrls() != null) {
+            paramMap.put("firstName", student.getFirstName());
+            paramMap.put("lastName", student.getLastName());
+            paramMap.put("passwHash", passwHash);
+            paramMap.put("login", student.getLogin());
+            paramMap.put("userToken", userToken);
+            paramMap.put("currentLesson", student.getCurrentLesson());
+            paramMap.put("currentURLs", student.getCurrentUrls());
 
-            if (currentURLs != null) {
-                paramMap.put("firstName", user.getName());
-                paramMap.put("lastName", user.getLastname());
-                paramMap.put("passwHash", passwHash);
-                paramMap.put("login", user.getLoginData().getLogin());
-                paramMap.put("userToken", userToken);
-                paramMap.put("currentURLs", currentURLs);
+            getNamedParameterJdbcTemplate().update(HSQL_INSERT_STUDENT, paramMap);
 
-                getNamedParameterJdbcTemplate().update(HSQL_INSERT_STUDENT, paramMap);
-
-                return userToken;
-            }
-            else {
-                throw new IllegalArgumentException();
-            }
+            return userToken;
         }
         else {
             throw new IllegalArgumentException();
@@ -198,14 +192,15 @@ public class HsqlUsersDao extends NamedParameterJdbcDaoSupport implements UsersD
     }
 
     @Override
-    public User getProfile(String userToken) {
+    public Student getProfile(String userToken) {
         SqlParameterSource namedParameters = new MapSqlParameterSource("userToken", userToken);
 
-        User user = getNamedParameterJdbcTemplate().queryForObject(HSQL_GET_STUDENT_BY_USERTOKEN,
-                namedParameters, userRowMapper);
+        int count = getNamedParameterJdbcTemplate().queryForObject(HSQL_STUDENTS_COUNT_BY_USERTOKEN,
+                namedParameters, Integer.class);
 
-        if (user != null) {
-            return user;
+        if (count != 1) {
+            return getNamedParameterJdbcTemplate().queryForObject(HSQL_GET_STUDENT_BY_USERTOKEN,
+                    namedParameters, studentRowMapper);
         }
         else {
             throw new IllegalArgumentException();
@@ -316,7 +311,6 @@ public class HsqlUsersDao extends NamedParameterJdbcDaoSupport implements UsersD
             if (studentID != null && lessonID != null) {
                 paramMap.put("studentID", studentID);
                 paramMap.put("lessonID", lessonID);
-                paramMap.put("block", result.getBlock());
                 paramMap.put("mark", result.getMark());
 
                 getNamedParameterJdbcTemplate().update(HSQL_INSERT_TEST_RESULT, paramMap);
@@ -399,5 +393,13 @@ public class HsqlUsersDao extends NamedParameterJdbcDaoSupport implements UsersD
         else {
             throw new IllegalArgumentException();
         }
+    }
+    @Override
+    public void setLessonID (int id, int lessonID) {
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("id", id);
+        paramMap.put("lessonID", lessonID);
+
+        getNamedParameterJdbcTemplate().update(HSQL_UPDATE_CURRENT_LESSON_BY_ID, paramMap);
     }
 }
