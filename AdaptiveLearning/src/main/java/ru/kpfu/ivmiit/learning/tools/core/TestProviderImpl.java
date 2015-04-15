@@ -1,9 +1,7 @@
 package ru.kpfu.ivmiit.learning.tools.core;
 
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import ru.kpfu.ivmiit.learning.tools.models.Answer;
 import ru.kpfu.ivmiit.learning.tools.models.Question;
 import ru.kpfu.ivmiit.learning.tools.models.Test;
@@ -38,6 +36,9 @@ public class TestProviderImpl extends NamedParameterJdbcDaoSupport implements Te
     private static final String HSQL_GET_ANSWER_BY_ID = "SELECT (*) FROM Answers WHERE " +
             "id = :answerID";
 
+    private static final String HSQL_GET_ANSWER_BY_QUESTION_ID = "SELECT (*) FROM Answers WHERE " +
+            "rel_questions_id = :questionID";
+
     private RowMapper<Answer> answerRowMapper = new RowMapper<Answer>() {
         @Override
         public Answer mapRow(ResultSet resultSet, int i) throws SQLException {
@@ -61,13 +62,19 @@ public class TestProviderImpl extends NamedParameterJdbcDaoSupport implements Te
             int correctAnswerId = resultSet.getInt("correctAnswerId");
             int block = resultSet.getInt("block");
 
-            SqlParameterSource namedParameters = new MapSqlParameterSource("answerID", correctAnswerId);
+            Map<String, Object> paramMap = new HashMap<String, Object>();
+            paramMap.put("answerID", correctAnswerId);
+            paramMap.put("questionID", id);
 
             Answer correctAnswer = getNamedParameterJdbcTemplate().queryForObject(HSQL_GET_ANSWER_BY_ID,
-                    namedParameters, answerRowMapper);
+                    paramMap, answerRowMapper);
+
+            List<Answer> answers = getNamedParameterJdbcTemplate().query(HSQL_GET_ANSWER_BY_QUESTION_ID,
+                    paramMap, answerRowMapper);
 
             Question question = new Question(id, questions, block, correctAnswerId);
             question.setCorrectAnswer(correctAnswer);
+            question.setAnswers(answers);
 
             return question;
         }
