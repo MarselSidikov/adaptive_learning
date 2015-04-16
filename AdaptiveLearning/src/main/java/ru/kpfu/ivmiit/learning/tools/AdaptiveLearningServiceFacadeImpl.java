@@ -21,7 +21,8 @@ public class AdaptiveLearningServiceFacadeImpl implements AdaptiveLearningServic
 	private MaterialsResolver materialsResolver;
 
 	private TestProvider testProvider;
-     private QuestionsDAO questionsDAO;
+
+    private QuestionsDAO questionsDAO;
 
     @Autowired
     public void setQuestionsDAO (QuestionsDAO questionsDAO) {

@@ -1,8 +1,5 @@
 package ru.kpfu.ivmiit.learning.tools.dao;
 
-import ru.kpfu.ivmiit.learning.tools.models.Material;
-import ru.kpfu.ivmiit.learning.tools.models.Test;
-
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
 
 import java.util.HashMap;
@@ -13,13 +10,13 @@ import java.util.Map;
  */
 public class HsqlMaterialsDao extends NamedParameterJdbcDaoSupport implements MaterialsDao {
 
-    private static final String HSQL_BLOCK_URLS_BY_LESSON_ID = "SELECT block_urls FROM Lesson WHERE id = :lessonID";
+    private static final String HSQL_BLOCK_URLS_BY_LESSON_ID = "SELECT block_urls FROM Lessons WHERE id = :lessonID";
 
-    private static final String HSQL_MAIN_MAT_URL_BY_LESSON_ID = "SELECT main_mat_url FROM Lesson WHERE id = :lessonID";
+    private static final String HSQL_MAIN_MAT_URL_BY_LESSON_ID = "SELECT mainMatUrl FROM Lessons WHERE id = :lessonID";
 
-    private static final String HSQL_EXTRA_MAT_URL_BY_LESSON_ID = "SELECT extra_mat_url FROM Lesson WHERE id = :lessonID";
+    private static final String HSQL_EXTRA_MAT_URL_BY_LESSON_ID = "SELECT extra_material_url FROM Lessons WHERE id = :lessonID";
 
-    private static final String HSQL_NEXT_LESSON_BY_LESSON_ID = "SELECT next_lesson FROM Lesson WHERE id = :lessonID";
+    private static final String HSQL_NEXT_LESSON_BY_LESSON_ID = "SELECT next_lesson FROM Lessons WHERE id = :lessonID";
 
 
     @Override

@@ -43,8 +43,7 @@ public class TestResult {
         this.mark = mark;
     }
 
-    public TestResult(int block, int mark) {
-
+    public TestResult(int mark) {
         this.mark = mark;
     }
 }

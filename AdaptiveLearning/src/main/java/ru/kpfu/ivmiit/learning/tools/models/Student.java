@@ -8,7 +8,7 @@ import java.util.List;
 public class Student {
     private String firstName;
     private String lastName;
-    private int passwHash;
+    private String passwHash;
     private String login;
     private String userToken;
     private List<Integer> currentLesson;
@@ -30,7 +30,7 @@ public class Student {
         this.currentUrls = currentUrls;
     }
 
-    public Student(String firstName, String lastName, int passwHash, String login, String userToken) {
+    public Student(String firstName, String lastName, String passwHash, String login, String userToken) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.passwHash = passwHash;
@@ -54,11 +54,11 @@ public class Student {
         this.lastName = lastName;
     }
 
-    public int getPasswHash() {
+    public String getPasswHash() {
         return passwHash;
     }
 
-    public void setPasswHash(int passwHash) {
+    public void setPasswHash(String passwHash) {
         this.passwHash = passwHash;
     }
 
