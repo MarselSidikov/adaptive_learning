@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class AdaptiveLearningServiceFacadeImpl implements AdaptiveLearningServiceFacade {
 
-	private UsersDao usersDao;
+	UsersDao usersDao;
 
 	private MaterialsResolver materialsResolver;
 
