@@ -666,3 +666,47 @@ INSERT INTO Answers VALUES (542,'Нельзя дать однозначный о
  */
 
 INSERT INTO Test VALUES (35,'180;181;182');
+
+INSERT INTO Lessons(1 , '/home/ae/lessons/1/основной. Работа в команде.docx' ,'/home/ae/lessons/1/дополнительный.docx' ,'/home/ae/lessons/1/блок.docx;/home/ae/lessons/1/2 блок.docx','2;3',1,2);
+
+INSERT INTO Lessons(2 , '/home/ae/lessons/2/Основной. Особенности работы в команде.docx' , '/home/ae/lessons/2/дополнительный.docx',
+'/home/ae/lessons/2/блок №1.docx;/home/ae/lessons/2/блок №2.docx','5;6',4,3);
+
+INSERT INTO Lessons(3 , '/home/ae/lessons/3/основной материал.docx','',
+'/home/ae/lessons/3/дополнительный материал для подглавы 1.docx;/home/ae/lessons/3/доп материал для подглавы 2.docx;/home/ae/lessons/3/доп материал для подглавы 3.docx','8;9;10',7,4);
+
+INSERT INTO Lessons(4 , '/home/ae/lessons/4/основной материал.docx','/home/ae/lessons/4/доп материал.docx','','',11,5);
+
+INSERT INTO Lessons(5 , '/home/ae/lessons/5/5.1 материал.pdf', '/home/ae/lessons/5/дополнительный материал.pdf',
+'/home/ae/lessons/5/5.1.1 дополнительный материал.pdf;/home/ae/lessons/5/5.1.2 дополнительный материал.pdf','13;14',12,6);
+
+INSERT INTO Lessons(6 , '/home/ae/lessons/6/6.1 материал.pdf' , '' , '/home/ae/lessons/6/6.2 дополнительный материал.pdf','16',15,7);
+
+INSERT INTO Lessons(7 , '/home/ae/lessons/7/7.1 Материал.pdf' , '/home/ae/lessons/7/7.1 дополнительный материал.pdf;home/ae/lessons/7/7.1.1 Дополнительный материал.pdf','','',17,8);
+
+INSERT INTO Lessons(8 , '/home/ae/lessons/8/8.1.1 Материал.pdf' , '' ,'/home/ae/lessons/8/8.1.2 дополнительный материал.pdf','19',18,9);
+
+INSERT INTO Lessons(9 , '/home/ae/lessons/9/9.1 Материал.pdf' , '','/home/ae/lessons/9/9.2 Дополнительный материал.pdf','21',20,10);
+
+INSERT INTO Lessons(10, '/home/ae/lessons/10/основной материал.docx', '/home/ae/lessons/10/Ссылка на дополнительный материал.docx','','',22,11);
+
+INSERT INTO Lessons(11, '/home/ae/lessons/11/основной материал.docx', '/home/ae/lessons/11/ссылки на дополнительный материал.docx','','',23,12);
+
+INSERT INTO Lessons(12, '/home/ae/lessons/12/основной материал.docx' , '','','',24,13);
+
+INSERT INTO Lessons(13, '/home/ae/lessons/13/Основной. Тестирование проектов.docx' ,
+'/home/ae/lessons/13/модуль 1.docx;/home/ae/lessons/13/модуль 2.docx;/home/ae/lessons/13/модуль 3.docx',
+'/home/ae/lessons/13/дополнительный.docx','26;27;28',25,14);
+
+INSERT INTO Lessons(14, '/home/ae/lessons/14/Основной. Составление технической документации.docx' , '/home/ae/lessons/14/дополнительный.docx',
+'/home/ae/lessons/14/модуль 1.docx','30',29,15);
+
+INSERT INTO Lessons(15, '/home/ae/lessons/15/Основной. Подход «клиент-сервер».docx' , '/home/ae/lessons/15/дополнительный.doc',
+'/home/ae/lessons/15/Модуль 1.docx','32',31,16);
+
+INSERT INTO Lessons(16, '/home/ae/lessons/16/Основной. Особенности оргонизации распределенной команды..docx' , /home/ae/lessons/16/дополнительный.docx',
+'/home/ae/lessons/16/Модуль 1.docx','34',33,17);
+
+INSERT INTO Lessons(17, '/home/ae/lessons/17/Основной. Как переносятся принципы с it.docx' , '/home/ae/lessons/17/Дополнительный.docx',
+'','',35,&);
+
